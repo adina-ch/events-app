@@ -1,12 +1,15 @@
-import AddEvent from "./components/AddEvent/AddEvent";
-import EventsList from "./components/EventsList/EventsList";
+import { EventsProvider } from "./EventsContext";
+
+import { Container, GlobalStyles, Wrapper } from "./global/globalStyles";
+
 import Header from "./components/Header/Header";
 import Sidebar from "./components/Sidebar/Sidebar";
-import { Container, GlobalStyles, Wrapper } from "./global/globalStyles";
+import AddEvent from "./components/AddEvent/AddEvent";
+import EventsList from "./components/EventsList/EventsList";
 
 const App = () => {
   return (
-    <>
+    <EventsProvider>
       <GlobalStyles />
       <Container>
         <Sidebar />
@@ -17,7 +20,7 @@ const App = () => {
           <AddEvent />
         </Wrapper>
       </Container>
-    </>
+    </EventsProvider>
   );
 };
 
