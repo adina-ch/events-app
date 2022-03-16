@@ -1,44 +1,117 @@
-import React from "react";
 import { StyledButton, Title } from "../../assets/styles/shared.styled";
 import { CreateEvent, InputWrapper } from "./AddEvent.styled";
-import ScheduleImg from "../../assets/images/schedule.svg";
+import { useFormik } from "formik";
 
 const AddEvent = () => {
+  const formik = useFormik({
+    initialValues: {
+      title: "",
+      attendees: "",
+      location: "",
+      description: "",
+      date: "",
+      time: "",
+    },
+    onSubmit: (values) => {
+      console.log("Form data", values);
+      formik.resetForm();
+    },
+    validate: (values) => {
+      let errors = {};
+
+      if (!values.title) {
+        errors.title = "Title is required";
+      }
+
+      if (!values.date) {
+        errors.date = "Date is required";
+      }
+
+      if (!values.time) {
+        errors.time = "Time is required";
+      }
+
+      return errors;
+    },
+  });
   return (
     <CreateEvent>
       <Title>Create new event</Title>
-      <form className="create-event-form">
+      <form onSubmit={formik.handleSubmit} className="create-event-form">
         <InputWrapper>
-          <label htmlFor="title">Title</label>
-          <input type="text" id="title" />
+          <label htmlFor="title">Title*</label>
+          <input
+            id="title"
+            name="title"
+            type="text"
+            {...formik.getFieldProps("title")}
+          />
+          {formik.touched.title && formik.errors.title ? (
+            <div className="error"> {formik.errors.title}</div>
+          ) : null}
         </InputWrapper>
         <InputWrapper>
           <label htmlFor="attendees">Attendees</label>
-          <input type="text" id="attendees" />
+          <input
+            id="attendees"
+            name="attendees"
+            type="text"
+            {...formik.getFieldProps("attendees")}
+          />
         </InputWrapper>
         <InputWrapper>
           <label htmlFor="location">Location</label>
-          <input type="text" id="location" />
+          <input
+            id="location"
+            name="location"
+            type="text"
+            {...formik.getFieldProps("location")}
+          />
         </InputWrapper>
-
         <InputWrapper>
           <label htmlFor="description">Description</label>
-          <textarea name="description" id="description" rows="5"></textarea>
-        </InputWrapper>
-        <InputWrapper>
-          <label>Date and time picker</label>
-          <input type="date" />
-          <input type="time" />
+          <textarea
+            id="description"
+            name="description"
+            rows="4"
+            {...formik.getFieldProps("description")}
+          />
         </InputWrapper>
 
+        <div className="date-time">
+          <InputWrapper>
+            <label>Event date*</label>
+            <input
+              id="date"
+              name="date"
+              type="date"
+              {...formik.getFieldProps("date")}
+            />
+            {formik.touched.date && formik.errors.date ? (
+              <div className="error"> {formik.errors.date}</div>
+            ) : null}
+          </InputWrapper>
+          <InputWrapper>
+            <label>Event time*</label>
+            <input
+              id="time"
+              name="time"
+              type="time"
+              {...formik.getFieldProps("time")}
+            />
+            {formik.touched.time && formik.errors.time ? (
+              <div className="error"> {formik.errors.time}</div>
+            ) : null}
+          </InputWrapper>
+        </div>
+
         <div className="btn-wrapper">
-          <StyledButton primary>Create</StyledButton>
-          <StyledButton>Cancel</StyledButton>
+          <StyledButton primary type="submit">
+            Create
+          </StyledButton>
+          <StyledButton type="button">Cancel</StyledButton>
         </div>
       </form>
-      {/* <div className="img-wrapper">
-          <img src={ScheduleImg} alt="schedule image" />
-        </div> */}
     </CreateEvent>
   );
 };
