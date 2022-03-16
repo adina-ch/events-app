@@ -1,17 +1,15 @@
 import { MdSearch } from "react-icons/md";
 import { StyledSearch } from "./SearchForm.styled";
 
-// import { Formik, Form, Field } from "formik";
-
-const SearchForm = () => {
+const SearchForm = ({ searchTerm, handleSearch }) => {
   return (
     <StyledSearch>
-      <input placeholder="Find event..." />
+      <input
+        placeholder="Find event..."
+        onChange={handleSearch}
+        value={searchTerm}
+      />
       <MdSearch size={30} className="search-icon" />
-
-      {/* <button>
-        <MdSearch size={30} />
-      </button> */}
     </StyledSearch>
   );
 };

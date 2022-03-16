@@ -24,6 +24,7 @@ import Sort from "../Sort/Sort";
 const EventsList = () => {
   const [events, setEvents] = useContext(EventsContext);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     getEventsList();
@@ -66,13 +67,18 @@ const EventsList = () => {
     console.log(selected);
   };
 
+  const handleSearch = (e) => {
+    console.log(e.target.value);
+    setSearchTerm(e.target.value);
+  };
+
   return (
     <>
       <Title>Events</Title>
       <StyledEventsList>
         <AllEventsAndActions>
           <div>
-            <SearchForm />
+            <SearchForm handleSearch={handleSearch} />
             <SortFilter>
               <Sort />
               <Filter />
@@ -82,17 +88,28 @@ const EventsList = () => {
             <SubTitle>Upcoming events</SubTitle>
             <ul>
               {events.length > 0 &&
-                events.map((eventItem) => {
-                  return (
-                    <EventCard
-                      key={eventItem.id}
-                      eventItem={eventItem}
-                      handleShowDetails={() => {
-                        handleShowDetails(eventItem.id);
-                      }}
-                    />
-                  );
-                })}
+                events
+                  .filter((eventItem) => {
+                    return (
+                      eventItem.title
+                        .toLowerCase()
+                        .includes(searchTerm.toLowerCase()) ||
+                      eventItem.description
+                        .toLowerCase()
+                        .includes(searchTerm.toLowerCase())
+                    );
+                  })
+                  .map((eventItem) => {
+                    return (
+                      <EventCard
+                        key={eventItem.id}
+                        eventItem={eventItem}
+                        handleShowDetails={() => {
+                          handleShowDetails(eventItem.id);
+                        }}
+                      />
+                    );
+                  })}
             </ul>
           </div>
         </AllEventsAndActions>
