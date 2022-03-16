@@ -3,14 +3,10 @@ import React from "react";
 import { Card } from "./EventCard.styled";
 
 const EventCard = ({ eventItem, handleShowDetails }) => {
-  const { id, title, date, time, description } = eventItem;
+  const { title, date, time, description } = eventItem;
   return (
     <li>
-      <Card
-        onClick={() => {
-          handleShowDetails(id);
-        }}
-      >
+      <Card onClick={handleShowDetails}>
         <div className="card-title">
           <h3>{title}</h3>
         </div>

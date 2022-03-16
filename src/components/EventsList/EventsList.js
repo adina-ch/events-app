@@ -43,6 +43,7 @@ const EventsList = () => {
         time: data[key].time,
       });
     }
+    console.log(loadedEvents);
     setEvents(loadedEvents);
   };
 
@@ -52,7 +53,7 @@ const EventsList = () => {
         "https://react-events-app-7e674-default-rtdb.europe-west1.firebasedatabase.app/events.json"
       )
       .then((response) => {
-        console.log(response.data);
+        console.log(response);
         updateLoadedEvents(response.data);
       })
       .catch((error) => {
@@ -62,7 +63,7 @@ const EventsList = () => {
   };
 
   const handleShowDetails = (id) => {
-    const selected = events.filter((eventItem) => eventItem.id === id);
+    const selected = events.find((eventItem) => eventItem.id === id);
     setSelectedEvent(selected);
     console.log(selected);
   };
@@ -117,24 +118,24 @@ const EventsList = () => {
           <StyledDetails>
             <SubTitle>Selected Event details</SubTitle>
             <div className="details-header">
-              <h3>{selectedEvent[0].title}</h3>
+              <h3>{selectedEvent.title}</h3>
               <BsThreeDots className="more" />
             </div>
             <div>
               <MdPeople className="icon" />
-              {selectedEvent[0].attendees}
+              {selectedEvent.attendees}
             </div>
             <div>
               <MdEventNote className="icon" />
-              {selectedEvent[0].date}, {selectedEvent[0].time}
+              {selectedEvent.date}, {selectedEvent.time}
             </div>
             <div>
               <MdLocationOn className="icon" />
-              {selectedEvent[0].location}
+              {selectedEvent.location}
             </div>
             <div>
               <CgDetailsMore className="icon" />
-              {selectedEvent[0].description}
+              {selectedEvent.description}
             </div>
           </StyledDetails>
         )}
