@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { colors } from "../../global/colors";
 
-export const StyledSearch = styled.form`
+export const StyledSearch = styled.div`
   position: relative;
   border: 1px solid ${colors.neutralDark};
   border-radius: 5px;
