@@ -22,45 +22,22 @@ import SearchForm from "../Search/SearchForm";
 import Sort from "../Sort/Sort";
 
 const EventsList = () => {
-  const [events, setEvents] = useContext(EventsContext);
+  const { events } = useContext(EventsContext);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [filteredEvents, setFilteredEvents] = useState(events);
 
   useEffect(() => {
-    getEventsList();
-  }, []);
-
-  const updateLoadedEvents = (data) => {
-    const loadedEvents = [];
-    for (const key in data) {
-      loadedEvents.push({
-        id: key,
-        title: data[key].title,
-        attendees: data[key].attendees,
-        location: data[key].location,
-        description: data[key].description,
-        date: data[key].date,
-        time: data[key].time,
-      });
-    }
-    console.log(loadedEvents);
-    setEvents(loadedEvents);
-  };
-
-  const getEventsList = () => {
-    axios
-      .get(
-        "https://react-events-app-7e674-default-rtdb.europe-west1.firebasedatabase.app/events.json"
-      )
-      .then((response) => {
-        console.log(response);
-        updateLoadedEvents(response.data);
-      })
-      .catch((error) => {
-        // handle error
-        console.log(error);
-      });
-  };
+    const filtered = events.filter((eventItem) => {
+      return (
+        eventItem.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        eventItem.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
+    console.log("1. filtered: ");
+    console.log(filtered);
+    setFilteredEvents(filtered);
+  }, [events, searchTerm]);
 
   const handleShowDetails = (id) => {
     const selected = events.find((eventItem) => eventItem.id === id);
@@ -89,28 +66,17 @@ const EventsList = () => {
             <SubTitle>Upcoming events</SubTitle>
             <ul>
               {events.length > 0 &&
-                events
-                  .filter((eventItem) => {
-                    return (
-                      eventItem.title
-                        .toLowerCase()
-                        .includes(searchTerm.toLowerCase()) ||
-                      eventItem.description
-                        .toLowerCase()
-                        .includes(searchTerm.toLowerCase())
-                    );
-                  })
-                  .map((eventItem) => {
-                    return (
-                      <EventCard
-                        key={eventItem.id}
-                        eventItem={eventItem}
-                        handleShowDetails={() => {
-                          handleShowDetails(eventItem.id);
-                        }}
-                      />
-                    );
-                  })}
+                filteredEvents.map((eventItem) => {
+                  return (
+                    <EventCard
+                      key={eventItem.id}
+                      eventItem={eventItem}
+                      handleShowDetails={() => {
+                        handleShowDetails(eventItem.id);
+                      }}
+                    />
+                  );
+                })}
             </ul>
           </div>
         </AllEventsAndActions>

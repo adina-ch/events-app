@@ -16,8 +16,8 @@ const App = () => {
         <Wrapper>
           <Header />
           {/* Routes */}
-          <EventsList />
-          {/* <AddEvent /> */}
+          {/* <EventsList /> */}
+          <AddEvent />
         </Wrapper>
       </Container>
     </EventsProvider>
