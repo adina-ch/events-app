@@ -2,8 +2,6 @@ import React, { useContext, useState, useEffect } from "react";
 
 import { EventsContext } from "../../EventsContext";
 
-import axios from "axios";
-
 import { MdPeople, MdLocationOn, MdEventNote } from "react-icons/md";
 import { CgDetailsMore } from "react-icons/cg";
 import { BsThreeDots } from "react-icons/bs";
@@ -34,19 +32,15 @@ const EventsList = () => {
         eventItem.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
     });
-    console.log("1. filtered: ");
-    console.log(filtered);
     setFilteredEvents(filtered);
   }, [events, searchTerm]);
 
   const handleShowDetails = (id) => {
     const selected = events.find((eventItem) => eventItem.id === id);
     setSelectedEvent(selected);
-    console.log(selected);
   };
 
   const handleSearch = (e) => {
-    console.log(e.target.value);
     setSearchTerm(e.target.value);
   };
 

@@ -22,7 +22,7 @@ export const EventsProvider = (props) => {
         time: data[key].time,
       });
     }
-    console.log(loadedEvents);
+
     setEvents(loadedEvents);
   };
 
@@ -32,15 +32,15 @@ export const EventsProvider = (props) => {
         "https://react-events-app-7e674-default-rtdb.europe-west1.firebasedatabase.app/events.json"
       )
       .then((response) => {
-        console.log("2. get data from context: ");
-        console.log(response);
         updateLoadedEvents(response.data);
       })
-      .catch((error) => {
-        // handle error
-        console.log(error);
-      });
+      .catch((error) => {});
   };
+
+  // const getEventsList2 = async () => {
+  //   const { data, error, status,  } = fetchEvents()
+  //   updateLoadedEvents(data);
+  // }
 
   return (
     <EventsContext.Provider value={{ events }}>

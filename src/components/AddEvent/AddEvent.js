@@ -1,61 +1,39 @@
-import { useState } from "react";
-
 import axios from "axios";
 import { Formik, Form } from "formik";
-import * as Yup from "yup";
+import Swal from "sweetalert2";
 
 import { Button, Grid, Stack } from "@mui/material";
 
-import { CreateEvent } from "./AddEvent.styled";
 import { Title } from "../../assets/styles/shared.styled";
+
+import { initialValues, validationSchema } from "../../utils/utils";
 
 import TextFieldWrapper from "./FormsUI/TextField";
 import DateTimePicker from "./FormsUI/DateTimePicker";
-import ButtonWrapper from "./FormsUI/Button";
-
-const initialValues = {
-  title: "",
-  attendees: "",
-  location: "",
-  description: "",
-  date: "",
-  time: "",
-};
-
-const validationSchema = Yup.object({
-  // complex validation to be added
-  title: Yup.string().required("Title is required"),
-  attendees: Yup.string().required("Attendees are required"),
-  location: Yup.string().required("Location is required"),
-  date: Yup.string().required("Date is required"),
-  time: Yup.string().required("Time is required"),
-});
 
 const onSubmit = (values, { resetForm }) => {
+  const { description } = values;
+
   axios
     .post(
       "https://react-events-app-7e674-default-rtdb.europe-west1.firebasedatabase.app/events.json",
       {
-        title: `${values.title}`,
-        attendees: `${values.attendees}`,
-        location: `${values.location}`,
-        description: `${values.description}` || "No description provided",
-        date: `${values.date}`,
-        time: `${values.time}`,
+        ...values,
+        description: description || "No description provided",
       }
     )
     .then((response) => {
-      console.log(response);
+      console.log("Your event was successfully created!");
     })
     .catch((error) => {
-      console.log(error);
+      console.log("Something went wrong. Please try again later.");
     });
   resetForm();
 };
 
 const AddEvent = () => {
   return (
-    <CreateEvent>
+    <div>
       <Title>Create new event</Title>
       <Formik
         initialValues={initialValues}
@@ -67,7 +45,6 @@ const AddEvent = () => {
             container
             spacing={2}
             sx={{
-              // border: "1px solid red",
               padding: "1em 2em",
             }}
           >
@@ -101,14 +78,16 @@ const AddEvent = () => {
 
             <Grid item xs={12}>
               <Stack spacing={2} direction="row" sx={{ marginTop: "1em" }}>
-                <ButtonWrapper variant="contained">Create</ButtonWrapper>
+                <Button variant="contained" type="submit">
+                  Create
+                </Button>
                 <Button variant="outlined">Cancel</Button>
               </Stack>
             </Grid>
           </Grid>
         </Form>
       </Formik>
-    </CreateEvent>
+    </div>
   );
 };
 
