@@ -1,29 +1,30 @@
-import React, { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 
 import { EventsContext } from "../../EventsContext";
 
-import { MdPeople, MdLocationOn, MdEventNote } from "react-icons/md";
-import { CgDetailsMore } from "react-icons/cg";
-import { BsThreeDots } from "react-icons/bs";
-
-import { SubTitle, Title } from "../../assets/styles/shared.styled";
 import {
-  AllEventsAndActions,
-  SortFilter,
-  StyledDetails,
-  StyledEventsList,
-} from "./EventsList.styled";
+  Container,
+  Grid,
+  List,
+  ListItem,
+  TextField,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import { Box } from "@mui/system";
+import { grey } from "@mui/material/colors";
 
-import EventCard from "../EventCard/EventCard";
-import Filter from "../Filter/Filter";
-import SearchForm from "../Search/SearchForm";
-import Sort from "../Sort/Sort";
+import DetailsCard from "./Cards/DetailsCard";
+import Sort from "./Actions/Sort";
+import EventCard from "./Cards/EventCard";
 
 const EventsList = () => {
   const { events } = useContext(EventsContext);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredEvents, setFilteredEvents] = useState(events);
+  const [sortByValue, setSortByValue] = useState("");
+  const [sortOrderValue, setSortOrderValue] = useState("");
 
   useEffect(() => {
     const filtered = events.filter((eventItem) => {
@@ -44,62 +45,90 @@ const EventsList = () => {
     setSearchTerm(e.target.value);
   };
 
+  const handleSortBy = (e) => {
+    setSortByValue(e.target.value);
+  };
+
+  const handleSortOrder = (e) => {
+    setSortOrderValue(e.target.value);
+  };
+
   return (
     <>
-      <Title>Events</Title>
-      <StyledEventsList>
-        <AllEventsAndActions>
-          <div>
-            <SearchForm handleSearch={handleSearch} />
-            <SortFilter>
-              <Sort />
-              <Filter />
-            </SortFilter>
-          </div>
-          <div>
-            <SubTitle>Upcoming events</SubTitle>
-            <ul>
-              {events.length > 0 &&
-                filteredEvents.map((eventItem) => {
-                  return (
-                    <EventCard
-                      key={eventItem.id}
-                      eventItem={eventItem}
-                      handleShowDetails={() => {
-                        handleShowDetails(eventItem.id);
-                      }}
-                    />
-                  );
-                })}
-            </ul>
-          </div>
-        </AllEventsAndActions>
-        {selectedEvent && (
-          <StyledDetails>
-            <SubTitle>Selected Event details</SubTitle>
-            <div className="details-header">
-              <h3>{selectedEvent.title}</h3>
-              <BsThreeDots className="more" />
-            </div>
-            <div>
-              <MdPeople className="icon" />
-              {selectedEvent.attendees}
-            </div>
-            <div>
-              <MdEventNote className="icon" />
-              {selectedEvent.date}, {selectedEvent.time}
-            </div>
-            <div>
-              <MdLocationOn className="icon" />
-              {selectedEvent.location}
-            </div>
-            <div>
-              <CgDetailsMore className="icon" />
-              {selectedEvent.description}
-            </div>
-          </StyledDetails>
-        )}
-      </StyledEventsList>
+      <Toolbar />
+      <Container>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography sx={{ padding: "0.75em 0 0" }} variant="h1">
+              Events
+            </Typography>
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              placeholder="Search..."
+              InputProps={{
+                type: "search",
+              }}
+              sx={{ width: "100%" }}
+              onChange={handleSearch}
+              value={searchTerm}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Sort
+              label="Sort by"
+              labelId="sort-by"
+              id="sort-by"
+              options={["none", "title", "date", "description"]}
+              value={sortByValue}
+              handleChange={handleSortBy}
+            />
+            <Sort
+              label="Sort order"
+              labelId="sort-order"
+              id="sort-order"
+              options={["none", "ascending", "descending"]}
+              value={sortOrderValue}
+              handleChange={handleSortOrder}
+            />
+          </Grid>
+
+          <Grid item xs={selectedEvent ? 6 : 12}>
+            <Typography sx={{ margin: "1em 0" }} variant="h2">
+              {events.length > 0 ? "Upcoming events" : "No upcoming events"}
+            </Typography>
+            <Box>
+              <List
+                sx={{
+                  overflow: "auto",
+                  maxHeight: 310,
+                  backgroundColor: grey[100],
+                  borderRadius: "6px",
+                }}
+              >
+                {events.length > 0 &&
+                  filteredEvents.map((eventItem) => (
+                    <ListItem key={eventItem.id}>
+                      <EventCard
+                        eventItem={eventItem}
+                        handleShowDetails={() => {
+                          handleShowDetails(eventItem.id);
+                        }}
+                      />
+                    </ListItem>
+                  ))}
+              </List>
+            </Box>
+          </Grid>
+
+          {selectedEvent && (
+            <Grid item xs={6}>
+              <DetailsCard selectedEvent={selectedEvent} />
+            </Grid>
+          )}
+        </Grid>
+      </Container>
     </>
   );
 };

@@ -19,10 +19,11 @@ export const EventsProvider = (props) => {
         location: data[key].location,
         description: data[key].description,
         date: data[key].date,
-        time: data[key].time,
+        startTime: data[key].time,
+        endTime: data[key].time,
       });
     }
-
+    console.log(loadedEvents);
     setEvents(loadedEvents);
   };
 
@@ -43,7 +44,7 @@ export const EventsProvider = (props) => {
   // }
 
   return (
-    <EventsContext.Provider value={{ events }}>
+    <EventsContext.Provider value={{ events, getEventsList }}>
       {props.children}
     </EventsContext.Provider>
   );

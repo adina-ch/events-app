@@ -6,7 +6,8 @@ export const initialValues = {
   location: "",
   description: "",
   date: "",
-  time: "",
+  startTime: "",
+  endTime: "",
 };
 
 export const validationSchema = Yup.object({
@@ -14,5 +15,10 @@ export const validationSchema = Yup.object({
   attendees: Yup.string().required("Attendees are required"),
   location: Yup.string().required("Location is required"),
   date: Yup.string().required("Date is required"),
-  time: Yup.string().required("Time is required"),
+  startTime: Yup.string().required("Start time is required"),
+  endTime: Yup.string().required("End time is required"),
 });
+
+export const capitalizeWordFirstLetter = (word) => {
+  return word.charAt(0).toUpperCase() + word.slice(1);
+};

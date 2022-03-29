@@ -23,10 +23,5 @@ export const Container = styled.div`
 `;
 
 export const Wrapper = styled.div`
-  width: calc(100% - 150px);
-  margin-left: 150px;
-  @media (max-width: 600px) {
-    width: 100%;
-    margin-left: 0;
-  }
+  width: 100%;
 `;
