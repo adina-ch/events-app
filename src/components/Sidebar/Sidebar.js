@@ -40,7 +40,7 @@ const Sidebar = () => {
 
       <Tabs
         orientation="vertical"
-        indicatorColor="white"
+        indicatorColor="primary"
         value={activeValue}
         onChange={activeValueHandler}
       >

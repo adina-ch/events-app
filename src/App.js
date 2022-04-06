@@ -9,24 +9,27 @@ import EventsList from "./components/EventsList/EventsList";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./global/theme";
+import { SnackbarProvider } from "./contexts/SnackbarContext";
 
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <EventsProvider>
-        <BrowserRouter>
-          <GlobalStyles />
-          <Container>
-            <Sidebar />
-            <Wrapper>
-              <Header />
-              <Routes>
-                <Route path="/" element={<EventsList />} />
-                <Route path="/add" element={<AddEvent />} />
-              </Routes>
-            </Wrapper>
-          </Container>
-        </BrowserRouter>
+        <SnackbarProvider>
+          <BrowserRouter>
+            <GlobalStyles />
+            <Container>
+              <Sidebar />
+              <Wrapper>
+                <Header />
+                <Routes>
+                  <Route path="/" element={<EventsList />} />
+                  <Route path="/add" element={<AddEvent />} />
+                </Routes>
+              </Wrapper>
+            </Container>
+          </BrowserRouter>
+        </SnackbarProvider>
       </EventsProvider>
     </ThemeProvider>
   );

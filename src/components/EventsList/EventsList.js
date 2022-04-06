@@ -20,11 +20,16 @@ import EventCard from "./Cards/EventCard";
 
 const EventsList = () => {
   const { events } = useContext(EventsContext);
+  const { getEventsList } = useContext(EventsContext);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredEvents, setFilteredEvents] = useState(events);
   const [sortByValue, setSortByValue] = useState("");
   const [sortOrderValue, setSortOrderValue] = useState("");
+
+  useEffect(() => {
+    getEventsList();
+  }, []);
 
   useEffect(() => {
     const filtered = events.filter((eventItem) => {
@@ -107,7 +112,7 @@ const EventsList = () => {
                   borderRadius: "6px",
                 }}
               >
-                {events.length > 0 &&
+                {events.length > 0 ? (
                   filteredEvents.map((eventItem) => (
                     <ListItem key={eventItem.id}>
                       <EventCard
@@ -117,7 +122,19 @@ const EventsList = () => {
                         }}
                       />
                     </ListItem>
-                  ))}
+                  ))
+                ) : (
+                  <Typography sx={{ padding: "1em" }}>
+                    No events in the list
+                  </Typography>
+                )}
+
+                {filteredEvents.length === 0 && searchTerm && (
+                  <Typography sx={{ padding: "1em" }}>
+                    We couldn't find any matches for "{searchTerm}". Please try
+                    a different search term.
+                  </Typography>
+                )}
               </List>
             </Box>
           </Grid>

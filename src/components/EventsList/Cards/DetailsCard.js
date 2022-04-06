@@ -1,4 +1,4 @@
-import { Paper, Typography } from "@mui/material";
+import { Chip, Paper, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
 const DetailsCard = ({ selectedEvent }) => {
@@ -16,21 +16,29 @@ const DetailsCard = ({ selectedEvent }) => {
           padding: "1em",
         }}
       >
-        <Typography variant="h6">{title}</Typography>
+        <Typography variant="h6" sx={{ paddingBottom: "0.5em" }}>
+          {title}
+        </Typography>
 
-        <Typography variant="body2" sx={{ paddingBottom: "1em" }}>
+        <Typography variant="body2" sx={{ padding: "0.5em" }}>
           Date: {date}
         </Typography>
 
-        <Typography variant="body2" sx={{ paddingBottom: "1em" }}>
+        <Typography variant="body2" sx={{ padding: "0.5em" }}>
           Time: {startTime} - {endTime}
         </Typography>
 
-        <Typography variant="body2" sx={{ paddingBottom: "1em" }}>
-          Attendees: {attendees}
+        <Typography variant="body2" sx={{ padding: "0.5em" }}>
+          Attendees:
         </Typography>
 
-        <Typography variant="body2" sx={{ paddingBottom: "1em" }}>
+        <Stack direction="row" spacing={1}>
+          {attendees.map((attendee, index) => (
+            <Chip label={attendee.name} key={index} />
+          ))}
+        </Stack>
+
+        <Typography variant="body2" sx={{ padding: "0.5em" }}>
           Location: {location}
         </Typography>
 
