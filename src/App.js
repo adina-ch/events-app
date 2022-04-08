@@ -1,9 +1,8 @@
 import { EventsProvider } from "./EventsContext";
 
-import { Container, GlobalStyles, Wrapper } from "./global/globalStyles";
-
 import Header from "./components/Header/Header";
 import Sidebar from "./components/Sidebar/Sidebar";
+
 import AddEvent from "./components/AddEvent/AddEvent";
 import EventsList from "./components/EventsList/EventsList";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -17,17 +16,12 @@ const App = () => {
       <EventsProvider>
         <SnackbarProvider>
           <BrowserRouter>
-            <GlobalStyles />
-            <Container>
-              <Sidebar />
-              <Wrapper>
-                <Header />
-                <Routes>
-                  <Route path="/" element={<EventsList />} />
-                  <Route path="/add" element={<AddEvent />} />
-                </Routes>
-              </Wrapper>
-            </Container>
+            <Header />
+            <Sidebar />
+            <Routes>
+              <Route path="/" element={<EventsList />} />
+              <Route path="/add" element={<AddEvent />} />
+            </Routes>
           </BrowserRouter>
         </SnackbarProvider>
       </EventsProvider>

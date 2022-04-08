@@ -8,11 +8,6 @@ export const EventsContext = createContext();
 export const EventsProvider = (props) => {
   const [events, setEvents] = useState([]);
 
-  // useEffect(() => {
-  //   getEventsList();
-
-  // }, []);
-
   const updateLoadedEvents = (data) => {
     const loadedEvents = [];
     for (const key in data) {
@@ -45,7 +40,6 @@ export const EventsProvider = (props) => {
   return (
     <EventsContext.Provider value={{ events, getEventsList, createEvent }}>
       {props.children}
-      {/* add snackbar */}
     </EventsContext.Provider>
   );
 };

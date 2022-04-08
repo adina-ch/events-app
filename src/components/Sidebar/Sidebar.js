@@ -5,8 +5,7 @@ import { NavLink } from "react-router-dom";
 import { Button, Divider, Drawer, Tab, Tabs, Typography } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
-
-const drawerWidth = 200;
+import { DRAWER_WIDTH } from "../../utils/utils";
 
 const Sidebar = () => {
   const [activeValue, setActiveValue] = useState(0);
@@ -28,12 +27,15 @@ const Sidebar = () => {
     <Drawer
       variant="permanent"
       sx={{
-        width: drawerWidth,
+        width: DRAWER_WIDTH,
         flexShrink: 0,
-        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: "border-box" },
+        [`& .MuiDrawer-paper`]: {
+          width: DRAWER_WIDTH,
+          boxSizing: "border-box",
+        },
       }}
     >
-      <Button component={NavLink} to="/" sx={{ padding: "1.1em" }}>
+      <Button component={NavLink} to="/" className="padding">
         <Typography variant="h6">LOGO</Typography>
       </Button>
       <Divider />
@@ -49,14 +51,14 @@ const Sidebar = () => {
           icon={<CalendarTodayIcon sx={{ fontSize: 35 }} />}
           component={NavLink}
           to="/"
-          sx={{ padding: "1em" }}
+          className="padding"
         />
         <Tab
           label="Add"
           icon={<AddRoundedIcon sx={{ fontSize: 35 }} />}
           component={NavLink}
           to="/add"
-          sx={{ padding: "1em" }}
+          className="padding"
         />
       </Tabs>
     </Drawer>

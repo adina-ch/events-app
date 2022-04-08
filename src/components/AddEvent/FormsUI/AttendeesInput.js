@@ -3,18 +3,13 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
 import { fetchAttendees } from "../../../API/attendees";
-import { useField } from "formik";
+import { useField, useFormikContext } from "formik";
 
-export const AttendeesInput = ({
-  name,
-  label,
-  value,
-  handleChange,
-  ...otherProps
-}) => {
+export const AttendeesInput = ({ name, label, value, ...otherProps }) => {
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState([]);
   const loading = open && options.length === 0;
+  const { setFieldValue, initialValues } = useFormikContext();
 
   const [field, meta] = useField(name);
 
@@ -27,7 +22,7 @@ export const AttendeesInput = ({
 
     (async () => {
       const attendees = await fetchAttendees();
-      // setOptions([...attendees]);
+
       if (active) {
         setOptions([...attendees]);
       }
@@ -55,6 +50,13 @@ export const AttendeesInput = ({
     configTextField.error = true;
     configTextField.helperText = meta.error;
   }
+
+  const handleChange = (event, value) => {
+    setFieldValue(
+      "attendees",
+      value !== null ? value : initialValues.attendees
+    );
+  };
 
   return (
     <Autocomplete

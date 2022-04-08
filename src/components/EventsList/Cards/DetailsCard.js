@@ -1,5 +1,5 @@
 import { Chip, Paper, Stack, Typography } from "@mui/material";
-import { grey } from "@mui/material/colors";
+import "./../styles.scss";
 
 const DetailsCard = ({ selectedEvent }) => {
   const { title, date, attendees, location, startTime, endTime, description } =
@@ -7,28 +7,19 @@ const DetailsCard = ({ selectedEvent }) => {
 
   return (
     <>
-      <Typography sx={{ margin: "1em 0" }} variant="h2">
-        Selected event
-      </Typography>
-      <Paper
-        variant="outlined"
-        sx={{
-          padding: "1em",
-        }}
-      >
-        <Typography variant="h6" sx={{ paddingBottom: "0.5em" }}>
-          {title}
-        </Typography>
+      <Typography variant="h2">Selected event</Typography>
+      <Paper variant="outlined" className="padding">
+        <Typography variant="h6">{title}</Typography>
 
-        <Typography variant="body2" sx={{ padding: "0.5em" }}>
+        <Typography variant="body2" className="margin">
           Date: {date}
         </Typography>
 
-        <Typography variant="body2" sx={{ padding: "0.5em" }}>
+        <Typography variant="body2" className="margin">
           Time: {startTime} - {endTime}
         </Typography>
 
-        <Typography variant="body2" sx={{ padding: "0.5em" }}>
+        <Typography variant="body2" className="margin">
           Attendees:
         </Typography>
 
@@ -38,19 +29,11 @@ const DetailsCard = ({ selectedEvent }) => {
           ))}
         </Stack>
 
-        <Typography variant="body2" sx={{ padding: "0.5em" }}>
+        <Typography variant="body2" className="margin">
           Location: {location}
         </Typography>
 
-        <Typography
-          variant="body2"
-          sx={{
-            overflow: "auto",
-            maxHeight: 110,
-            padding: "1em 0",
-            borderTop: `1px solid ${grey[300]}`,
-          }}
-        >
+        <Typography variant="body2" className="description">
           {description}
         </Typography>
       </Paper>

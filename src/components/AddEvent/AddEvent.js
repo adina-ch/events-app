@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -13,6 +13,8 @@ import {
   Typography,
 } from "@mui/material";
 
+import "../../global/globalStyles.scss";
+
 import { initialValues, validationSchema } from "../../utils/utils";
 import TextFieldWrapper from "./FormsUI/TextField";
 import DateTimePicker from "./FormsUI/DateTimePicker";
@@ -22,18 +24,9 @@ import { AttendeesInput } from "./FormsUI/AttendeesInput";
 
 const AddEvent = () => {
   const { createEvent } = useContext(EventsContext);
-  const { setSnackData } = useContext(SnackbarContext);
-  const [selectedAttendees, setSelectedAttendees] = useState([]);
+  const { updateSnack } = useContext(SnackbarContext);
 
   let navigate = useNavigate();
-
-  const updateSnack = (message, open, severity) => {
-    setSnackData({
-      message,
-      open,
-      severity,
-    });
-  };
 
   const onSubmit = (values, { resetForm }) => {
     const { description } = values;
@@ -41,7 +34,6 @@ const AddEvent = () => {
     createEvent({
       ...values,
       description: description || "No description provided",
-      attendees: selectedAttendees,
     })
       .then((response) => {
         updateSnack("Event created successfully!", true, "success");
@@ -65,92 +57,76 @@ const AddEvent = () => {
   return (
     <>
       <Toolbar />
-      <Container>
-        <Typography sx={{ padding: "0.75em 0" }} variant="h1">
-          Create new event
-        </Typography>
+      <Container className="container">
+        <Typography variant="h1">Create new event</Typography>
 
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={onSubmit}
         >
-          {({ isSubmitting, setFieldValue }) => (
-            <Form>
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <TextFieldWrapper name="title" label="Title*" />
-                </Grid>
-                <Grid item xs={6}>
-                  <DateTimePicker name="date" type="date" label="Date*" />
-                </Grid>
+          {({ isSubmitting }) => {
+            return (
+              <Form>
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <TextFieldWrapper name="title" label="Title*" />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <DateTimePicker name="date" type="date" label="Date*" />
+                  </Grid>
 
-                <Grid item xs={6}>
-                  <AttendeesInput
-                    name="attendees"
-                    label="Attendees*"
-                    handleChange={(event, value) => {
-                      setSelectedAttendees(value);
-                      setFieldValue(
-                        "attendees",
-                        value !== null ? value : initialValues.attendees
-                      );
-                    }}
-                  />
-                </Grid>
+                  <Grid item xs={6}>
+                    <AttendeesInput name="attendees" label="Attendees*" />
+                  </Grid>
 
-                <Grid item xs={6}>
-                  <DateTimePicker
-                    name="startTime"
-                    type="time"
-                    label="Start time*"
-                  />
-                </Grid>
+                  <Grid item xs={6}>
+                    <DateTimePicker
+                      name="startTime"
+                      type="time"
+                      label="Start time*"
+                    />
+                  </Grid>
 
-                <Grid item xs={6}>
-                  <TextFieldWrapper name="location" label="Location*" />
-                </Grid>
+                  <Grid item xs={6}>
+                    <TextFieldWrapper name="location" label="Location*" />
+                  </Grid>
 
-                <Grid item xs={6}>
-                  <DateTimePicker
-                    name="endTime"
-                    type="time"
-                    label="End time*"
-                  />
-                </Grid>
+                  <Grid item xs={6}>
+                    <DateTimePicker
+                      name="endTime"
+                      type="time"
+                      label="End time*"
+                    />
+                  </Grid>
 
-                <Grid item xs={12}>
-                  <TextFieldWrapper
-                    name="description"
-                    label="Description"
-                    multiline={true}
-                    rows={4}
-                  />
-                </Grid>
+                  <Grid item xs={12}>
+                    <TextFieldWrapper
+                      name="description"
+                      label="Description"
+                      multiline={true}
+                      rows={4}
+                    />
+                  </Grid>
 
-                <Grid item xs={12}>
-                  <Stack spacing={2} direction="row" sx={{ marginTop: "1em" }}>
-                    <Button
-                      variant="contained"
-                      type="submit"
-                      disabled={isSubmitting}
-                      sx={{ fontSize: "16px", padding: "0.5em 2em" }}
-                    >
-                      Create
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      sx={{ fontSize: "16px", padding: "0.5em 2em" }}
-                      component={NavLink}
-                      to="/"
-                    >
-                      Cancel
-                    </Button>
-                  </Stack>
+                  <Grid item xs={12}>
+                    <Stack spacing={2} direction="row">
+                      <Button
+                        variant="contained"
+                        type="submit"
+                        disabled={isSubmitting}
+                      >
+                        Create
+                      </Button>
+                      <Button variant="outlined" component={NavLink} to="/">
+                        Cancel
+                      </Button>
+                    </Stack>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Form>
-          )}
+              </Form>
+            );
+          }}
         </Formik>
       </Container>
     </>

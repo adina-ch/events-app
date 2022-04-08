@@ -1,6 +1,10 @@
 import moment from "moment";
 import * as Yup from "yup";
 
+const GRID_MIN_WIDTH_XS = 6;
+const GRID_FULL_WIDTH_XS = 12;
+export const DRAWER_WIDTH = 200;
+
 const calcYesterday = () => {
   const today = new Date();
   const yesterday = new Date(today);
@@ -36,10 +40,33 @@ export const capitalizeWordFirstLetter = (word) => {
   return word.charAt(0).toUpperCase() + word.slice(1);
 };
 
-export const formatWithComma = (array) => {
-  array.map((arrayEl, index) => {
-    return array.length > 1 && index < array.length - 1
-      ? `${arrayEl}, `
-      : arrayEl;
-  });
+export const addPadding = ({
+  children,
+  all,
+  top,
+  right,
+  bottom,
+  left,
+  style = {},
+}) => {
+  const paddingStyles = {};
+  paddingStyles.top = top || all;
+  paddingStyles.right = right || all;
+  paddingStyles.bottom = bottom || all;
+  paddingStyles.left = left || all;
+
+  return (
+    <div
+      style={{
+        ...style,
+        paddingStyles,
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
+export const calculateColumns = (condition) => {
+  return condition ? 6 : 12;
 };

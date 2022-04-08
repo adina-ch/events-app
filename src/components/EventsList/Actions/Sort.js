@@ -5,16 +5,11 @@ import { capitalizeWordFirstLetter } from "../../../utils/utils";
 
 const Sort = ({ label, labelId, id, options, value, handleChange }) => {
   return (
-    <Box
-      sx={{
-        minWidth: 120,
-        display: "inline-block",
-        marginRight: "1em",
-      }}
-    >
+    <Box>
       <FormControl fullWidth>
         <InputLabel id={labelId}>{label}</InputLabel>
         <Select
+          sx={{ minWidth: "120px" }}
           labelId={labelId}
           id={id}
           value={value}

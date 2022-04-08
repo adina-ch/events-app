@@ -9,10 +9,19 @@ export const SnackbarProvider = ({ children }) => {
     open: false,
     severity: "success",
   });
+
+  const updateSnack = (message, open, severity) => {
+    setSnackData({
+      message,
+      open,
+      severity,
+    });
+  };
+
   const { open, message, severity } = snackData;
 
   return (
-    <SnackbarContext.Provider value={{ setSnackData }}>
+    <SnackbarContext.Provider value={{ updateSnack }}>
       {children}
       <Snackbar open={open}>
         <Alert severity={severity}>{message}</Alert>

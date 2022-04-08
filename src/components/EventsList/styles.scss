@@ -1,0 +1,31 @@
+.MuiList-root.list {
+  overflow: auto;
+  max-height: 300px;
+  background-color: #f5f5f5;
+  border-radius: 6px;
+}
+
+.MuiTypography-body1.padding,
+.MuiPaper-root.padding,
+.MuiTab-root.padding,
+.MuiButton-root.padding {
+  padding: 1em;
+}
+
+.MuiTypography-body2.margin {
+  margin: 0.75em 0;
+}
+
+.MuiTypography-body2.description {
+  overflow: auto;
+  height: 47px;
+  padding: 1em 0;
+  border-top: 1px solid #f5f5f5;
+}
+
+.MuiPaper-root.card {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 1em;
+  cursor: pointer;
+}

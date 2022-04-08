@@ -7,16 +7,20 @@ import {
   Grid,
   List,
   ListItem,
+  Stack,
   TextField,
   Toolbar,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { grey } from "@mui/material/colors";
 
 import DetailsCard from "./Cards/DetailsCard";
 import Sort from "./Actions/Sort";
 import EventCard from "./Cards/EventCard";
+import "./styles.scss";
+import "../../global/globalStyles.scss";
+import CustomizedSwitches from "./Actions/Switch";
+import { calculateColumns } from "../../utils/utils";
 
 const EventsList = () => {
   const { events } = useContext(EventsContext);
@@ -61,57 +65,40 @@ const EventsList = () => {
   return (
     <>
       <Toolbar />
-      <Container>
+      <Container className="container">
+        <Typography variant="h1">Events</Typography>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Typography sx={{ padding: "0.75em 0 0" }} variant="h1">
-              Events
-            </Typography>
-          </Grid>
-
           <Grid item xs={12}>
             <TextField
               placeholder="Search..."
               InputProps={{
                 type: "search",
               }}
-              sx={{ width: "100%" }}
+              fullWidth={true}
               onChange={handleSearch}
               value={searchTerm}
             />
           </Grid>
           <Grid item xs={12}>
-            <Sort
-              label="Sort by"
-              labelId="sort-by"
-              id="sort-by"
-              options={["none", "title", "date", "description"]}
-              value={sortByValue}
-              handleChange={handleSortBy}
-            />
-            <Sort
-              label="Sort order"
-              labelId="sort-order"
-              id="sort-order"
-              options={["none", "ascending", "descending"]}
-              value={sortOrderValue}
-              handleChange={handleSortOrder}
-            />
+            <Stack direction="row" spacing={3} alignItems="center">
+              <Sort
+                label="Sort by"
+                labelId="sort-by"
+                id="sort-by"
+                options={["none", "title", "date", "description"]}
+                value={sortByValue}
+                handleChange={handleSortBy}
+              />
+              <CustomizedSwitches />
+            </Stack>
           </Grid>
 
-          <Grid item xs={selectedEvent ? 6 : 12}>
-            <Typography sx={{ margin: "1em 0" }} variant="h2">
+          <Grid item xs={calculateColumns(selectedEvent)}>
+            <Typography variant="h2">
               {events.length > 0 ? "Upcoming events" : "No upcoming events"}
             </Typography>
             <Box>
-              <List
-                sx={{
-                  overflow: "auto",
-                  maxHeight: 310,
-                  backgroundColor: grey[100],
-                  borderRadius: "6px",
-                }}
-              >
+              <List className="list">
                 {events.length > 0 ? (
                   filteredEvents.map((eventItem) => (
                     <ListItem key={eventItem.id}>
@@ -124,13 +111,13 @@ const EventsList = () => {
                     </ListItem>
                   ))
                 ) : (
-                  <Typography sx={{ padding: "1em" }}>
-                    No events in the list
+                  <Typography variant="body1" className="padding">
+                    You have no events in the list.
                   </Typography>
                 )}
 
                 {filteredEvents.length === 0 && searchTerm && (
-                  <Typography sx={{ padding: "1em" }}>
+                  <Typography variant="body1" className="padding">
                     We couldn't find any matches for "{searchTerm}". Please try
                     a different search term.
                   </Typography>

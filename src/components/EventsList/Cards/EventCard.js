@@ -1,16 +1,13 @@
 import { Paper, Typography } from "@mui/material";
+import "./../styles.scss";
 
 const EventCard = ({ eventItem, handleShowDetails }) => {
   const { title, date, startTime, endTime, description } = eventItem;
   return (
-    <Paper
-      elevation={1}
-      sx={{ width: "100%", padding: "1em", cursor: "pointer" }}
-      onClick={handleShowDetails}
-    >
+    <Paper elevation={1} className="card" onClick={handleShowDetails}>
       <Typography variant="h6">{title}</Typography>
 
-      <Typography variant="body2" sx={{ paddingBottom: "1em" }}>
+      <Typography variant="body2" className="margin">
         {date}, {startTime} - {endTime}
       </Typography>
 
