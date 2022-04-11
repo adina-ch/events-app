@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material/styles";
+import { DRAWER_WIDTH } from "../utils/utils";
 
 const mainPurple = "#735BF2";
 const mainOrange = "#F2CA74";
@@ -48,11 +49,17 @@ export default createTheme({
         },
       },
     },
-  },
-  MuiTab: {
-    styleOverrides: {
-      root: {
-        padding: "1em",
+
+    MuiDrawer: {
+      styleOverrides: {
+        root: {
+          width: DRAWER_WIDTH,
+          flexShrink: 0,
+          [`& .MuiDrawer-paper`]: {
+            width: DRAWER_WIDTH,
+            boxSizing: "border-box",
+          },
+        },
       },
     },
   },

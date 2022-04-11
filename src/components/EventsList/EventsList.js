@@ -14,13 +14,13 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 
-import DetailsCard from "./Cards/DetailsCard";
-import Sort from "./Actions/Sort";
-import EventCard from "./Cards/EventCard";
 import "./styles.scss";
 import "../../global/globalStyles.scss";
-import CustomizedSwitches from "./Actions/Switch";
 import { calculateColumns } from "../../utils/utils";
+import DetailsCard from "./Cards/DetailsCard";
+import EventCard from "./Cards/EventCard";
+import Sort from "./Actions/Sort";
+import CustomSwitch from "./Actions/Switch";
 
 const EventsList = () => {
   const { events } = useContext(EventsContext);
@@ -36,6 +36,7 @@ const EventsList = () => {
   }, []);
 
   useEffect(() => {
+    console.log(events);
     const filtered = events.filter((eventItem) => {
       return (
         eventItem.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -89,7 +90,7 @@ const EventsList = () => {
                 value={sortByValue}
                 handleChange={handleSortBy}
               />
-              <CustomizedSwitches />
+              <CustomSwitch />
             </Stack>
           </Grid>
 

@@ -1,10 +1,8 @@
-import * as React from "react";
 import { styled } from "@mui/material/styles";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import { Stack, Typography } from "@mui/material";
 
-const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+const MaterialUISwitch = styled(Switch)(() => ({
   width: 62,
   height: 34,
   padding: 7,
@@ -18,12 +16,12 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 
       "& + .MuiSwitch-track": {
         opacity: 1,
-        backgroundColor: theme.palette.mode === "dark" ? "#8796A5" : "#aab4be",
+        backgroundColor: "#e1dbff",
       },
     },
   },
   "& .MuiSwitch-thumb": {
-    backgroundColor: theme.palette.mode === "dark" ? "#003892" : "#001e3c",
+    backgroundColor: "#624DCF",
     width: 32,
     height: 32,
     "&:before": {
@@ -39,12 +37,12 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
   "& .MuiSwitch-track": {
     opacity: 1,
-    backgroundColor: theme.palette.mode === "dark" ? "#8796A5" : "#aab4be",
+    backgroundColor: "#e1dbff",
     borderRadius: 20 / 2,
   },
 }));
 
-export default function CustomizedSwitches() {
+const CustomSwitch = () => {
   return (
     <Stack direction="row" spacing={1} alignItems="center">
       <Typography>Ascending</Typography>
@@ -52,4 +50,6 @@ export default function CustomizedSwitches() {
       <Typography>Descending</Typography>
     </Stack>
   );
-}
+};
+
+export default CustomSwitch;

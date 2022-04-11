@@ -1,4 +1,5 @@
 import { Chip, Paper, Stack, Typography } from "@mui/material";
+
 import "./../styles.scss";
 
 const DetailsCard = ({ selectedEvent }) => {

@@ -1,4 +1,5 @@
 import { Paper, Typography } from "@mui/material";
+
 import "./../styles.scss";
 
 const EventCard = ({ eventItem, handleShowDetails }) => {

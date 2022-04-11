@@ -15,12 +15,12 @@ import {
 
 import "../../global/globalStyles.scss";
 
-import { initialValues, validationSchema } from "../../utils/utils";
-import TextFieldWrapper from "./FormsUI/TextField";
-import DateTimePicker from "./FormsUI/DateTimePicker";
 import { EventsContext } from "../../EventsContext";
 import { SnackbarContext } from "../../contexts/SnackbarContext";
+import TextFieldWrapper from "./FormsUI/TextField";
+import DateTimePicker from "./FormsUI/DateTimePicker";
 import { AttendeesInput } from "./FormsUI/AttendeesInput";
+import { initialValues, validationSchema } from "../../utils/utils";
 
 const AddEvent = () => {
   const { createEvent } = useContext(EventsContext);

@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+
+import { useField, useFormikContext } from "formik";
+
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
+
 import { fetchAttendees } from "../../../API/attendees";
-import { useField, useFormikContext } from "formik";
 
 export const AttendeesInput = ({ name, label, value, ...otherProps }) => {
   const [open, setOpen] = useState(false);
