@@ -1,6 +1,11 @@
-import { EventsProvider } from "./EventsContext";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import { Container, GlobalStyles, Wrapper } from "./global/globalStyles";
+import { EventsProvider } from "./EventsContext";
+import { SnackbarProvider } from "./contexts/SnackbarContext";
+
+import { ThemeProvider } from "@mui/material/styles";
+
+import theme from "./global/theme";
 
 import Header from "./components/Header/Header";
 import Sidebar from "./components/Sidebar/Sidebar";
@@ -9,18 +14,20 @@ import EventsList from "./components/EventsList/EventsList";
 
 const App = () => {
   return (
-    <EventsProvider>
-      <GlobalStyles />
-      <Container>
-        <Sidebar />
-        <Wrapper>
-          <Header />
-          {/* Routes */}
-          <EventsList />
-          {/* <AddEvent /> */}
-        </Wrapper>
-      </Container>
-    </EventsProvider>
+    <ThemeProvider theme={theme}>
+      <EventsProvider>
+        <SnackbarProvider>
+          <BrowserRouter>
+            <Header />
+            <Sidebar />
+            <Routes>
+              <Route path="/" element={<EventsList />} />
+              <Route path="/add" element={<AddEvent />} />
+            </Routes>
+          </BrowserRouter>
+        </SnackbarProvider>
+      </EventsProvider>
+    </ThemeProvider>
   );
 };
 

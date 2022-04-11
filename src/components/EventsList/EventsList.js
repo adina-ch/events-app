@@ -1,31 +1,42 @@
-import React, { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 
 import { EventsContext } from "../../EventsContext";
 
-import { MdPeople, MdLocationOn, MdEventNote } from "react-icons/md";
-import { CgDetailsMore } from "react-icons/cg";
-import { BsThreeDots } from "react-icons/bs";
-
-import { SubTitle, Title } from "../../assets/styles/shared.styled";
 import {
-  AllEventsAndActions,
-  SortFilter,
-  StyledDetails,
-  StyledEventsList,
-} from "./EventsList.styled";
+  Container,
+  Grid,
+  List,
+  ListItem,
+  Stack,
+  TextField,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import { Box } from "@mui/system";
 
-import EventCard from "../EventCard/EventCard";
-import Filter from "../Filter/Filter";
-import SearchForm from "../Search/SearchForm";
-import Sort from "../Sort/Sort";
+import "./styles.scss";
+import "../../global/globalStyles.scss";
+import { calculateColumns } from "../../utils/utils";
+import DetailsCard from "./Cards/DetailsCard";
+import EventCard from "./Cards/EventCard";
+import Sort from "./Actions/Sort";
+import CustomSwitch from "./Actions/Switch";
 
 const EventsList = () => {
   const { events } = useContext(EventsContext);
+  const { getEventsList } = useContext(EventsContext);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredEvents, setFilteredEvents] = useState(events);
+  const [sortByValue, setSortByValue] = useState("");
+  const [sortOrderValue, setSortOrderValue] = useState("");
 
   useEffect(() => {
+    getEventsList();
+  }, []);
+
+  useEffect(() => {
+    console.log(events);
     const filtered = events.filter((eventItem) => {
       return (
         eventItem.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -44,62 +55,85 @@ const EventsList = () => {
     setSearchTerm(e.target.value);
   };
 
+  const handleSortBy = (e) => {
+    setSortByValue(e.target.value);
+  };
+
+  const handleSortOrder = (e) => {
+    setSortOrderValue(e.target.value);
+  };
+
   return (
     <>
-      <Title>Events</Title>
-      <StyledEventsList>
-        <AllEventsAndActions>
-          <div>
-            <SearchForm handleSearch={handleSearch} />
-            <SortFilter>
-              <Sort />
-              <Filter />
-            </SortFilter>
-          </div>
-          <div>
-            <SubTitle>Upcoming events</SubTitle>
-            <ul>
-              {events.length > 0 &&
-                filteredEvents.map((eventItem) => {
-                  return (
-                    <EventCard
-                      key={eventItem.id}
-                      eventItem={eventItem}
-                      handleShowDetails={() => {
-                        handleShowDetails(eventItem.id);
-                      }}
-                    />
-                  );
-                })}
-            </ul>
-          </div>
-        </AllEventsAndActions>
-        {selectedEvent && (
-          <StyledDetails>
-            <SubTitle>Selected Event details</SubTitle>
-            <div className="details-header">
-              <h3>{selectedEvent.title}</h3>
-              <BsThreeDots className="more" />
-            </div>
-            <div>
-              <MdPeople className="icon" />
-              {selectedEvent.attendees}
-            </div>
-            <div>
-              <MdEventNote className="icon" />
-              {selectedEvent.date}, {selectedEvent.time}
-            </div>
-            <div>
-              <MdLocationOn className="icon" />
-              {selectedEvent.location}
-            </div>
-            <div>
-              <CgDetailsMore className="icon" />
-              {selectedEvent.description}
-            </div>
-          </StyledDetails>
-        )}
-      </StyledEventsList>
+      <Toolbar />
+      <Container className="container">
+        <Typography variant="h1">Events</Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              placeholder="Search..."
+              InputProps={{
+                type: "search",
+              }}
+              fullWidth={true}
+              onChange={handleSearch}
+              value={searchTerm}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Stack direction="row" spacing={3} alignItems="center">
+              <Sort
+                label="Sort by"
+                labelId="sort-by"
+                id="sort-by"
+                options={["none", "title", "date", "description"]}
+                value={sortByValue}
+                handleChange={handleSortBy}
+              />
+              <CustomSwitch />
+            </Stack>
+          </Grid>
+
+          <Grid item xs={calculateColumns(selectedEvent)}>
+            <Typography variant="h2">
+              {events.length > 0 ? "Upcoming events" : "No upcoming events"}
+            </Typography>
+            <Box>
+              <List className="list">
+                {events.length > 0 ? (
+                  filteredEvents.map((eventItem) => (
+                    <ListItem key={eventItem.id}>
+                      <EventCard
+                        eventItem={eventItem}
+                        handleShowDetails={() => {
+                          handleShowDetails(eventItem.id);
+                        }}
+                      />
+                    </ListItem>
+                  ))
+                ) : (
+                  <Typography variant="body1" className="padding">
+                    You have no events in the list.
+                  </Typography>
+                )}
+
+                {filteredEvents.length === 0 && searchTerm && (
+                  <Typography variant="body1" className="padding">
+                    We couldn't find any matches for "{searchTerm}". Please try
+                    a different search term.
+                  </Typography>
+                )}
+              </List>
+            </Box>
+          </Grid>
+
+          {selectedEvent && (
+            <Grid item xs={6}>
+              <DetailsCard selectedEvent={selectedEvent} />
+            </Grid>
+          )}
+        </Grid>
+      </Container>
     </>
   );
 };

@@ -1,13 +1,14 @@
-import { Avatar, Line, StyledHeader } from "./Header.styled";
+import { AppBar, Avatar, Toolbar } from "@mui/material";
+
+import "./styles.scss";
 
 const Header = () => {
   return (
-    <>
-      <StyledHeader>
-        <Avatar>AC</Avatar>
-      </StyledHeader>
-      <Line />
-    </>
+    <AppBar position="fixed">
+      <Toolbar>
+        <Avatar className="align-right">AC</Avatar>
+      </Toolbar>
+    </AppBar>
   );
 };
 
