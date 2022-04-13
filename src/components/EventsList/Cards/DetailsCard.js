@@ -1,15 +1,48 @@
-import { Chip, Paper, Stack, Typography } from "@mui/material";
+import {
+  Chip,
+  IconButton,
+  Paper,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
 import "./../styles.scss";
 
-const DetailsCard = ({ selectedEvent }) => {
-  const { title, date, attendees, location, startTime, endTime, description } =
-    selectedEvent;
+const DetailsCard = ({ selectedEvent, handleDeleteEvent }) => {
+  const {
+    title,
+    date,
+    attendees,
+    location,
+    startTime,
+    endTime,
+    description,
+    id,
+  } = selectedEvent;
 
   return (
     <>
       <Typography variant="h2">Selected event</Typography>
-      <Paper variant="outlined" className="padding">
+      <Paper variant="outlined" className="padding card-actions-parent">
+        <div className="card-actions">
+          <Tooltip title="Edit">
+            <IconButton>
+              <EditOutlinedIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Delete">
+            <IconButton
+              onClick={() => {
+                handleDeleteEvent(id);
+              }}
+            >
+              <DeleteOutlineOutlinedIcon />
+            </IconButton>
+          </Tooltip>
+        </div>
         <Typography variant="h6">{title}</Typography>
 
         <Typography variant="body2" className="margin">

@@ -25,18 +25,18 @@ import CustomSwitch from "./Actions/Switch";
 const EventsList = () => {
   const { events } = useContext(EventsContext);
   const { getEventsList } = useContext(EventsContext);
+  const { removeEvent } = useContext(EventsContext);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredEvents, setFilteredEvents] = useState(events);
-  const [sortByValue, setSortByValue] = useState("");
-  const [sortOrderValue, setSortOrderValue] = useState("");
+  const [sortValue, setSortValue] = useState("none");
+  const [active, setActive] = useState(null);
 
   useEffect(() => {
     getEventsList();
   }, []);
 
   useEffect(() => {
-    console.log(events);
     const filtered = events.filter((eventItem) => {
       return (
         eventItem.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -49,18 +49,23 @@ const EventsList = () => {
   const handleShowDetails = (id) => {
     const selected = events.find((eventItem) => eventItem.id === id);
     setSelectedEvent(selected);
+    setActive(id);
   };
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  const handleSortBy = (e) => {
-    setSortByValue(e.target.value);
+  const handleSortValue = (e) => {
+    setSortValue(e.target.value);
   };
 
-  const handleSortOrder = (e) => {
-    setSortOrderValue(e.target.value);
+  const handleDeleteEvent = (id) => {
+    removeEvent(id);
+
+    if (selectedEvent.id === id) {
+      setSelectedEvent(null);
+    }
   };
 
   return (
@@ -83,14 +88,11 @@ const EventsList = () => {
           <Grid item xs={12}>
             <Stack direction="row" spacing={3} alignItems="center">
               <Sort
-                label="Sort by"
-                labelId="sort-by"
-                id="sort-by"
-                options={["none", "title", "date", "description"]}
-                value={sortByValue}
-                handleChange={handleSortBy}
+                value={sortValue}
+                handleChange={handleSortValue}
+                defaultVal={sortValue}
               />
-              <CustomSwitch />
+              {sortValue !== "none" && <CustomSwitch />}
             </Stack>
           </Grid>
 
@@ -108,6 +110,10 @@ const EventsList = () => {
                         handleShowDetails={() => {
                           handleShowDetails(eventItem.id);
                         }}
+                        handleDeleteEvent={() => {
+                          handleDeleteEvent(eventItem.id);
+                        }}
+                        active={active}
                       />
                     </ListItem>
                   ))
@@ -129,7 +135,10 @@ const EventsList = () => {
 
           {selectedEvent && (
             <Grid item xs={6}>
-              <DetailsCard selectedEvent={selectedEvent} />
+              <DetailsCard
+                selectedEvent={selectedEvent}
+                handleDeleteEvent={handleDeleteEvent}
+              />
             </Grid>
           )}
         </Grid>

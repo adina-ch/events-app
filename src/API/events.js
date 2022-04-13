@@ -23,3 +23,16 @@ export const addEvent = async (body) => {
       return error;
     });
 };
+
+export const deleteEvent = async (eventId) => {
+  return axios
+    .delete(
+      `https://react-events-app-7e674-default-rtdb.europe-west1.firebasedatabase.app/events/${eventId}.json`
+    )
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};

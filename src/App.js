@@ -15,8 +15,8 @@ import EventsList from "./components/EventsList/EventsList";
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
-      <EventsProvider>
-        <SnackbarProvider>
+      <SnackbarProvider>
+        <EventsProvider>
           <BrowserRouter>
             <Header />
             <Sidebar />
@@ -25,8 +25,8 @@ const App = () => {
               <Route path="/add" element={<AddEvent />} />
             </Routes>
           </BrowserRouter>
-        </SnackbarProvider>
-      </EventsProvider>
+        </EventsProvider>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 };

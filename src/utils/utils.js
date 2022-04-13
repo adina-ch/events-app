@@ -6,11 +6,19 @@ const GRID_FULL_WIDTH_XS = 12;
 export const DRAWER_WIDTH = 200;
 
 const calcYesterday = () => {
-  const today = new Date();
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
+  return moment().subtract(1, "days").toString();
+};
 
-  return yesterday;
+const calcCurrentDate = () => {
+  return moment().format("YYYY-MM-DD");
+};
+
+const calcCurrentHour = () => {
+  return moment().format("HH:mm");
+};
+
+const calcInitialEndTime = () => {
+  return moment().add(15, "minutes").format("HH:mm");
 };
 
 export const initialValues = {
@@ -18,9 +26,9 @@ export const initialValues = {
   attendees: [],
   location: "",
   description: "",
-  date: "",
-  startTime: "",
-  endTime: "",
+  date: calcCurrentDate(),
+  startTime: calcCurrentHour(),
+  endTime: calcInitialEndTime(),
 };
 
 export const validationSchema = Yup.object({
@@ -32,8 +40,22 @@ export const validationSchema = Yup.object({
   date: Yup.date()
     .required("Date is required")
     .min(calcYesterday(), "Date cannot be in the past"),
-  startTime: Yup.string().required("Start time is required"),
-  endTime: Yup.string().required("End time is required"),
+  startTime: Yup.string()
+    .required("Start time is required")
+    .test("is-greater", "Start time should be in the future", function (value) {
+      const currentHour = calcCurrentHour();
+      return moment(value, "HH:mm").isSameOrAfter(moment(currentHour, "HH:mm"));
+    }),
+  endTime: Yup.string()
+    .required("End time is required")
+    .test(
+      "is-greater",
+      "End time should be greater than start time",
+      function (value) {
+        const { startTime } = this.parent;
+        return moment(value, "HH:mm").isSameOrAfter(moment(startTime, "HH:mm"));
+      }
+    ),
 });
 
 export const capitalizeWordFirstLetter = (word) => {
@@ -68,5 +90,5 @@ export const addPadding = ({
 };
 
 export const calculateColumns = (condition) => {
-  return condition ? 6 : 12;
+  return condition ? GRID_MIN_WIDTH_XS : GRID_FULL_WIDTH_XS;
 };
