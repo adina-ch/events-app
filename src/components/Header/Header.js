@@ -1,12 +1,12 @@
 import { AppBar, Avatar, Toolbar } from "@mui/material";
 
-import "./styles.scss";
+import styles from "./Header.module.scss";
 
 const Header = () => {
   return (
     <AppBar position="fixed">
       <Toolbar>
-        <Avatar className="align-right">AC</Avatar>
+        <Avatar className={styles.rightAligned}>AC</Avatar>
       </Toolbar>
     </AppBar>
   );

@@ -1,26 +1,59 @@
-import { Chip, Paper, Stack, Typography } from "@mui/material";
+import {
+  Chip,
+  IconButton,
+  Paper,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
-import "./../styles.scss";
+import styles from "../EventsList.module.scss";
 
-const DetailsCard = ({ selectedEvent }) => {
-  const { title, date, attendees, location, startTime, endTime, description } =
-    selectedEvent;
+const DetailsCard = ({ selectedEvent, handleDeleteEvent }) => {
+  const {
+    title,
+    date,
+    attendees,
+    location,
+    startTime,
+    endTime,
+    description,
+    id,
+  } = selectedEvent;
 
   return (
     <>
       <Typography variant="h2">Selected event</Typography>
-      <Paper variant="outlined" className="padding">
+      <Paper variant="outlined" className={styles.card}>
+        <div className={styles.cardActions}>
+          <Tooltip title="Edit">
+            <IconButton>
+              <EditOutlinedIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Delete">
+            <IconButton
+              onClick={() => {
+                handleDeleteEvent(id);
+              }}
+            >
+              <DeleteOutlineOutlinedIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        </div>
         <Typography variant="h6">{title}</Typography>
 
-        <Typography variant="body2" className="margin">
+        <Typography variant="body2" className={styles.cardText}>
           Date: {date}
         </Typography>
 
-        <Typography variant="body2" className="margin">
+        <Typography variant="body2" className={styles.cardText}>
           Time: {startTime} - {endTime}
         </Typography>
 
-        <Typography variant="body2" className="margin">
+        <Typography variant="body2" className={styles.cardText}>
           Attendees:
         </Typography>
 
@@ -30,11 +63,11 @@ const DetailsCard = ({ selectedEvent }) => {
           ))}
         </Stack>
 
-        <Typography variant="body2" className="margin">
+        <Typography variant="body2" className={styles.cardText}>
           Location: {location}
         </Typography>
 
-        <Typography variant="body2" className="description">
+        <Typography variant="body2" className={styles.selectedCardDescription}>
           {description}
         </Typography>
       </Paper>

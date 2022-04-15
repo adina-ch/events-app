@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import "../../global/globalStyles.scss";
+import "../../styles/globalStyles.scss";
 
 import { EventsContext } from "../../EventsContext";
 import { SnackbarContext } from "../../contexts/SnackbarContext";

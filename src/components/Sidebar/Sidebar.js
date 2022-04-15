@@ -6,6 +6,8 @@ import { Button, Divider, Drawer, Tab, Tabs, Typography } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 
+import styles from "./Sidebar.module.scss";
+
 const Sidebar = () => {
   const [activeValue, setActiveValue] = useState(0);
 
@@ -24,7 +26,7 @@ const Sidebar = () => {
 
   return (
     <Drawer variant="permanent">
-      <Button component={NavLink} to="/" className="padding">
+      <Button component={NavLink} to="/" className={styles.menuItem}>
         <Typography variant="h6">LOGO</Typography>
       </Button>
       <Divider />
@@ -40,14 +42,14 @@ const Sidebar = () => {
           icon={<CalendarTodayIcon fontSize="large" />}
           component={NavLink}
           to="/"
-          className="padding"
+          className={styles.menuItem}
         />
         <Tab
           label="Add"
           icon={<AddRoundedIcon fontSize="large" />}
           component={NavLink}
           to="/add"
-          className="padding"
+          className={styles.menuItem}
         />
       </Tabs>
     </Drawer>

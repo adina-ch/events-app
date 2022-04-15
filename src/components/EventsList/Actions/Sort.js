@@ -1,32 +1,32 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { Box } from "@mui/system";
 
-import "../styles.scss";
-import { capitalizeWordFirstLetter } from "../../../utils/utils";
+import styles from "../EventsList.module.scss";
 
-const Sort = ({ label, labelId, id, options, value, handleChange }) => {
+import { SORT_FIELD_OPTIONS } from "../../../utils/utils";
+
+const Sort = ({ value, defaultVal, handleChange }) => {
   return (
-    <Box>
-      <FormControl fullWidth>
-        <InputLabel id={labelId}>{label}</InputLabel>
-        <Select
-          labelId={labelId}
-          id={id}
-          value={value}
-          label={label}
-          onChange={handleChange}
-          className="select"
-        >
-          {options.map((option, index) => {
-            return (
-              <MenuItem value={option} key={option[index]}>
-                {capitalizeWordFirstLetter(option)}
-              </MenuItem>
-            );
-          })}
-        </Select>
-      </FormControl>
-    </Box>
+    <FormControl>
+      <InputLabel id="sort-by-label">Sort by</InputLabel>
+      <Select
+        id="sort-by-label"
+        value={value}
+        onChange={handleChange}
+        label="Sort by"
+        displayEmpty
+        className={styles.select}
+        defaultValue={defaultVal}
+      >
+        {SORT_FIELD_OPTIONS.map((option) => {
+          const { value, id, label } = option;
+          return (
+            <MenuItem value={value} key={id}>
+              {label}
+            </MenuItem>
+          );
+        })}
+      </Select>
+    </FormControl>
   );
 };
 

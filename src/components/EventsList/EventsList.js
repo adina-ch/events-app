@@ -14,8 +14,8 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 
-import "./styles.scss";
-import "../../global/globalStyles.scss";
+import styles from "./EventsList.module.scss";
+import "../../styles/globalStyles.scss";
 import { calculateColumns } from "../../utils/utils";
 import DetailsCard from "./Cards/DetailsCard";
 import EventCard from "./Cards/EventCard";
@@ -25,42 +25,72 @@ import CustomSwitch from "./Actions/Switch";
 const EventsList = () => {
   const { events } = useContext(EventsContext);
   const { getEventsList } = useContext(EventsContext);
+  const { removeEvent } = useContext(EventsContext);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredEvents, setFilteredEvents] = useState(events);
-  const [sortByValue, setSortByValue] = useState("");
-  const [sortOrderValue, setSortOrderValue] = useState("");
+  const [sortedAndFilteredEvents, setSortedAndFilteredEvents] =
+    useState(events);
+  const [sortValue, setSortValue] = useState("none");
+  const [active, setActive] = useState(null);
+  const [isDescending, setIsDescending] = useState(false);
 
   useEffect(() => {
     getEventsList();
   }, []);
 
   useEffect(() => {
-    console.log(events);
     const filtered = events.filter((eventItem) => {
       return (
         eventItem.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         eventItem.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
     });
-    setFilteredEvents(filtered);
-  }, [events, searchTerm]);
+    setSortedAndFilteredEvents(filtered);
+  }, [events, searchTerm, sortValue, isDescending]);
 
   const handleShowDetails = (id) => {
     const selected = events.find((eventItem) => eventItem.id === id);
     setSelectedEvent(selected);
+    setActive(id);
   };
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  const handleSortBy = (e) => {
-    setSortByValue(e.target.value);
+  const getSortOrder = (isChecked) => {
+    setIsDescending(isChecked);
   };
 
-  const handleSortOrder = (e) => {
-    setSortOrderValue(e.target.value);
+  const sortByHour = () => {};
+
+  const getSortedEvents = (filteredEv) => {
+    let sortedEvents = [...filteredEv];
+
+    return sortedEvents.sort(function (a, b) {
+      const keyA = a[sortValue].toUpperCase();
+      const keyB = b[sortValue].toUpperCase();
+      if (keyA < keyB) {
+        return -1;
+      }
+      if (keyA > keyB) {
+        return 1;
+      }
+      return 0;
+    });
+  };
+
+  const handleSortValue = (e) => {
+    setSortValue(e.target.value);
+    setSortedAndFilteredEvents(getSortedEvents(e.target.value));
+  };
+
+  const handleDeleteEvent = (id) => {
+    removeEvent(id);
+
+    if (selectedEvent && selectedEvent.id === id) {
+      setSelectedEvent(null);
+    }
   };
 
   return (
@@ -83,14 +113,16 @@ const EventsList = () => {
           <Grid item xs={12}>
             <Stack direction="row" spacing={3} alignItems="center">
               <Sort
-                label="Sort by"
-                labelId="sort-by"
-                id="sort-by"
-                options={["none", "title", "date", "description"]}
-                value={sortByValue}
-                handleChange={handleSortBy}
+                value={sortValue}
+                handleChange={handleSortValue}
+                defaultVal={sortValue}
               />
-              <CustomSwitch />
+              {sortValue !== "none" && (
+                <CustomSwitch
+                  isDescending={isDescending}
+                  handleChange={getSortOrder}
+                />
+              )}
             </Stack>
           </Grid>
 
@@ -99,26 +131,30 @@ const EventsList = () => {
               {events.length > 0 ? "Upcoming events" : "No upcoming events"}
             </Typography>
             <Box>
-              <List className="list">
+              <List className={styles.cardsList}>
                 {events.length > 0 ? (
-                  filteredEvents.map((eventItem) => (
+                  sortedAndFilteredEvents.map((eventItem) => (
                     <ListItem key={eventItem.id}>
                       <EventCard
                         eventItem={eventItem}
                         handleShowDetails={() => {
                           handleShowDetails(eventItem.id);
                         }}
+                        handleDeleteEvent={() => {
+                          handleDeleteEvent(eventItem.id);
+                        }}
+                        active={active}
                       />
                     </ListItem>
                   ))
                 ) : (
-                  <Typography variant="body1" className="padding">
+                  <Typography variant="body1" className={styles.resultsBox}>
                     You have no events in the list.
                   </Typography>
                 )}
 
-                {filteredEvents.length === 0 && searchTerm && (
-                  <Typography variant="body1" className="padding">
+                {sortedAndFilteredEvents.length === 0 && searchTerm && (
+                  <Typography variant="body1" className={styles.resultsBox}>
                     We couldn't find any matches for "{searchTerm}". Please try
                     a different search term.
                   </Typography>
@@ -129,7 +165,10 @@ const EventsList = () => {
 
           {selectedEvent && (
             <Grid item xs={6}>
-              <DetailsCard selectedEvent={selectedEvent} />
+              <DetailsCard
+                selectedEvent={selectedEvent}
+                handleDeleteEvent={handleDeleteEvent}
+              />
             </Grid>
           )}
         </Grid>
