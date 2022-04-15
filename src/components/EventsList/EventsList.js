@@ -148,19 +148,13 @@ const EventsList = () => {
                     </ListItem>
                   ))
                 ) : (
-                  <Typography
-                    variant="body1"
-                    // className={styles.padding}
-                  >
+                  <Typography variant="body1" className={styles.resultsBox}>
                     You have no events in the list.
                   </Typography>
                 )}
 
                 {sortedAndFilteredEvents.length === 0 && searchTerm && (
-                  <Typography
-                    variant="body1"
-                    // className={styles.padding}
-                  >
+                  <Typography variant="body1" className={styles.resultsBox}>
                     We couldn't find any matches for "{searchTerm}". Please try
                     a different search term.
                   </Typography>
