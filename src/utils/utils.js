@@ -4,6 +4,12 @@ import * as Yup from "yup";
 const GRID_MIN_WIDTH_XS = 6;
 const GRID_FULL_WIDTH_XS = 12;
 export const DRAWER_WIDTH = 200;
+export const SELECT_OPTIONS = [
+  { value: "none", label: "None", id: 1 },
+  { value: "title", label: "Title", id: 2 },
+  { value: "date", label: "Date", id: 3 },
+  { value: "description", label: "Description", id: 4 },
+];
 
 const calcYesterday = () => {
   return moment().subtract(1, "days").toString();

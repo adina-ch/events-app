@@ -7,7 +7,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Menu, MenuItem, Paper, Typography } from "@mui/material";
 import { IconButton, ListItemIcon, ListItemText } from "@mui/material";
 
-import "./../styles.scss";
+import styles from "../EventsList.module.scss";
 
 const EventCard = ({
   eventItem,
@@ -31,14 +31,17 @@ const EventCard = ({
   return (
     <Paper
       elevation={1}
-      className={`card card-actions-parent ${active === id ? "active" : null}`}
+      className={`${styles.card} ${styles.cardPaper} ${
+        active === id ? styles.active : null
+      }`}
     >
-      <div className="card-actions">
+      <div className={styles.cardActions}>
         <IconButton onClick={handleClick}>
           <MoreHorizIcon
             color="primary"
             aria-controls={open ? "basic-menu" : undefined}
             aria-expanded={open ? "true" : undefined}
+            fontSize="small"
           />
         </IconButton>
 
@@ -88,7 +91,7 @@ const EventCard = ({
 
       <Typography variant="h6">{title}</Typography>
 
-      <Typography variant="body2" className="margin">
+      <Typography variant="body2" className={styles.cardText}>
         {date}, {startTime} - {endTime}
       </Typography>
 

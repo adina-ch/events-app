@@ -14,8 +14,8 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 
-import "./styles.scss";
-import "../../global/globalStyles.scss";
+import styles from "./EventsList.module.scss";
+import "../../styles/globalStyles.scss";
 import { calculateColumns } from "../../utils/utils";
 import DetailsCard from "./Cards/DetailsCard";
 import EventCard from "./Cards/EventCard";
@@ -28,9 +28,11 @@ const EventsList = () => {
   const { removeEvent } = useContext(EventsContext);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredEvents, setFilteredEvents] = useState(events);
+  const [sortedAndFilteredEvents, setSortedAndFilteredEvents] =
+    useState(events);
   const [sortValue, setSortValue] = useState("none");
   const [active, setActive] = useState(null);
+  const [isDescending, setIsDescending] = useState(false);
 
   useEffect(() => {
     getEventsList();
@@ -43,8 +45,8 @@ const EventsList = () => {
         eventItem.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
     });
-    setFilteredEvents(filtered);
-  }, [events, searchTerm]);
+    setSortedAndFilteredEvents(filtered);
+  }, [events, searchTerm, sortValue, isDescending]);
 
   const handleShowDetails = (id) => {
     const selected = events.find((eventItem) => eventItem.id === id);
@@ -56,14 +58,37 @@ const EventsList = () => {
     setSearchTerm(e.target.value);
   };
 
+  const getSortOrder = (isChecked) => {
+    setIsDescending(isChecked);
+  };
+
+  const sortByHour = () => {};
+
+  const getSortedEvents = (filteredEv) => {
+    let sortedEvents = [...filteredEv];
+
+    return sortedEvents.sort(function (a, b) {
+      const keyA = a[sortValue].toUpperCase();
+      const keyB = b[sortValue].toUpperCase();
+      if (keyA < keyB) {
+        return -1;
+      }
+      if (keyA > keyB) {
+        return 1;
+      }
+      return 0;
+    });
+  };
+
   const handleSortValue = (e) => {
     setSortValue(e.target.value);
+    setSortedAndFilteredEvents(getSortedEvents(e.target.value));
   };
 
   const handleDeleteEvent = (id) => {
     removeEvent(id);
 
-    if (selectedEvent.id === id) {
+    if (selectedEvent && selectedEvent.id === id) {
       setSelectedEvent(null);
     }
   };
@@ -92,7 +117,12 @@ const EventsList = () => {
                 handleChange={handleSortValue}
                 defaultVal={sortValue}
               />
-              {sortValue !== "none" && <CustomSwitch />}
+              {sortValue !== "none" && (
+                <CustomSwitch
+                  isDescending={isDescending}
+                  handleChange={getSortOrder}
+                />
+              )}
             </Stack>
           </Grid>
 
@@ -101,9 +131,9 @@ const EventsList = () => {
               {events.length > 0 ? "Upcoming events" : "No upcoming events"}
             </Typography>
             <Box>
-              <List className="list">
+              <List className={styles.cardsList}>
                 {events.length > 0 ? (
-                  filteredEvents.map((eventItem) => (
+                  sortedAndFilteredEvents.map((eventItem) => (
                     <ListItem key={eventItem.id}>
                       <EventCard
                         eventItem={eventItem}
@@ -118,13 +148,19 @@ const EventsList = () => {
                     </ListItem>
                   ))
                 ) : (
-                  <Typography variant="body1" className="padding">
+                  <Typography
+                    variant="body1"
+                    // className={styles.padding}
+                  >
                     You have no events in the list.
                   </Typography>
                 )}
 
-                {filteredEvents.length === 0 && searchTerm && (
-                  <Typography variant="body1" className="padding">
+                {sortedAndFilteredEvents.length === 0 && searchTerm && (
+                  <Typography
+                    variant="body1"
+                    // className={styles.padding}
+                  >
                     We couldn't find any matches for "{searchTerm}". Please try
                     a different search term.
                   </Typography>

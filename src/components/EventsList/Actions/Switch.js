@@ -42,11 +42,19 @@ const MaterialUISwitch = styled(Switch)(() => ({
   },
 }));
 
-const CustomSwitch = () => {
+const CustomSwitch = ({ isDescending, handleChange }) => {
+  const onChange = (event) => {
+    handleChange(event.target.checked);
+  };
+
   return (
     <Stack direction="row" spacing={1} alignItems="center">
       <Typography>Ascending</Typography>
-      <MaterialUISwitch defaultChecked />
+      <MaterialUISwitch
+        checked={isDescending}
+        onChange={onChange}
+        inputProps={{ "aria-label": "controlled" }}
+      />
       <Typography>Descending</Typography>
     </Stack>
   );
