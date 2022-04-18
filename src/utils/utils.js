@@ -98,3 +98,53 @@ export const addPadding = ({
 export const calculateColumns = (condition) => {
   return condition ? GRID_MIN_WIDTH_XS : GRID_FULL_WIDTH_XS;
 };
+
+export const sortEventsAscending = (events, sortCondition) => {
+  let sortedEvents = [...events];
+
+  return sortedEvents.sort((a, b) => {
+    const keyA = a[sortCondition].toLowerCase();
+    const keyB = b[sortCondition].toLowerCase();
+    if (keyA < keyB) {
+      return -1;
+    }
+    if (keyA > keyB) {
+      return 1;
+    }
+    if (sortCondition === "date" && a[sortCondition] === b[sortCondition]) {
+      if (a.startTime < b.startTime) {
+        return -1;
+      }
+
+      if (a.startTime > b.startTime) {
+        return 1;
+      }
+    }
+    return 0;
+  });
+};
+
+export const sortEventsDescending = (events, sortCondition) => {
+  let sortedEvents = [...events];
+
+  return sortedEvents.sort((a, b) => {
+    const keyA = a[sortCondition].toLowerCase();
+    const keyB = b[sortCondition].toLowerCase();
+    if (keyA > keyB) {
+      return -1;
+    }
+    if (keyA < keyB) {
+      return 1;
+    }
+    if (sortCondition === "date" && a[sortCondition] === b[sortCondition]) {
+      if (a.startTime > b.startTime) {
+        return -1;
+      }
+
+      if (a.startTime < b.startTime) {
+        return 1;
+      }
+    }
+    return 0;
+  });
+};
