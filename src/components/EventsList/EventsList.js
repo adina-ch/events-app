@@ -60,10 +60,8 @@ const EventsList = () => {
 
     if (sortValue !== "none") {
       sortedAndFiltered = getSortedEvents(sortedAndFiltered, sortValue);
-      setSortedAndFilteredEvents(sortedAndFiltered);
-    } else {
-      setSortedAndFilteredEvents(filtered);
     }
+    setSortedAndFilteredEvents(sortedAndFiltered);
   }, [events, searchTerm, sortValue, isDescending]);
 
   const handleShowDetails = (id) => {
