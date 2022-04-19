@@ -111,15 +111,18 @@ export const sortEventsAscending = (events, sortCondition) => {
     if (keyA > keyB) {
       return 1;
     }
-    if (sortCondition === "date" && a[sortCondition] === b[sortCondition]) {
-      if (a.startTime < b.startTime) {
+    if (a[sortCondition] === b[sortCondition]) {
+      const startTimeA = new Date(`${a.date}T${a.startTime}`);
+      const startTimeB = new Date(`${b.date}T${b.startTime}`);
+      if (startTimeA.getTime() < startTimeB.getTime()) {
         return -1;
       }
 
-      if (a.startTime > b.startTime) {
+      if (startTimeA.getTime() > startTimeB.getTime()) {
         return 1;
       }
     }
+
     return 0;
   });
 };
@@ -136,15 +139,19 @@ export const sortEventsDescending = (events, sortCondition) => {
     if (keyA < keyB) {
       return 1;
     }
-    if (sortCondition === "date" && a[sortCondition] === b[sortCondition]) {
-      if (a.startTime > b.startTime) {
+
+    if (a[sortCondition] === b[sortCondition]) {
+      const startTimeA = new Date(`${a.date}T${a.startTime}`);
+      const startTimeB = new Date(`${b.date}T${b.startTime}`);
+      if (startTimeA.getTime() > startTimeB.getTime()) {
         return -1;
       }
 
-      if (a.startTime < b.startTime) {
+      if (startTimeA.getTime() < startTimeB.getTime()) {
         return 1;
       }
     }
+
     return 0;
   });
 };
