@@ -16,16 +16,18 @@ import { Box } from "@mui/system";
 
 import styles from "./EventsList.module.scss";
 import "../../styles/globalStyles.scss";
-import { calculateColumns } from "../../utils/utils";
+import {
+  calculateColumns,
+  sortEventsAscending,
+  sortEventsDescending,
+} from "../../utils/utils";
 import DetailsCard from "./Cards/DetailsCard";
 import EventCard from "./Cards/EventCard";
 import Sort from "./Actions/Sort";
 import CustomSwitch from "./Actions/Switch";
 
 const EventsList = () => {
-  const { events } = useContext(EventsContext);
-  const { getEventsList } = useContext(EventsContext);
-  const { removeEvent } = useContext(EventsContext);
+  const { events, getEventsList, removeEvent } = useContext(EventsContext);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortedAndFilteredEvents, setSortedAndFilteredEvents] =
@@ -39,13 +41,27 @@ const EventsList = () => {
   }, []);
 
   useEffect(() => {
-    const filtered = events.filter((eventItem) => {
-      return (
-        eventItem.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        eventItem.description.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    });
-    setSortedAndFilteredEvents(filtered);
+    let filtered = [...events];
+
+    if (searchTerm) {
+      filtered = filtered.filter((eventItem) => {
+        return (
+          eventItem.title
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase().trim()) ||
+          eventItem.description
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase().trim())
+        );
+      });
+    }
+
+    let sortedAndFiltered = [...filtered];
+
+    if (sortValue !== "none") {
+      sortedAndFiltered = getSortedEvents(sortedAndFiltered, sortValue);
+    }
+    setSortedAndFilteredEvents(sortedAndFiltered);
   }, [events, searchTerm, sortValue, isDescending]);
 
   const handleShowDetails = (id) => {
@@ -62,27 +78,16 @@ const EventsList = () => {
     setIsDescending(isChecked);
   };
 
-  const sortByHour = () => {};
-
-  const getSortedEvents = (filteredEv) => {
-    let sortedEvents = [...filteredEv];
-
-    return sortedEvents.sort(function (a, b) {
-      const keyA = a[sortValue].toUpperCase();
-      const keyB = b[sortValue].toUpperCase();
-      if (keyA < keyB) {
-        return -1;
-      }
-      if (keyA > keyB) {
-        return 1;
-      }
-      return 0;
-    });
+  const getSortedEvents = (filteredEv, sortCondition) => {
+    if (isDescending) {
+      return sortEventsDescending(filteredEv, sortCondition);
+    } else {
+      return sortEventsAscending(filteredEv, sortCondition);
+    }
   };
 
   const handleSortValue = (e) => {
     setSortValue(e.target.value);
-    setSortedAndFilteredEvents(getSortedEvents(e.target.value));
   };
 
   const handleDeleteEvent = (id) => {
@@ -101,7 +106,7 @@ const EventsList = () => {
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
-              placeholder="Search..."
+              placeholder="Search event..."
               InputProps={{
                 type: "search",
               }}
