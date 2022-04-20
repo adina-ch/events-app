@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -23,8 +23,12 @@ import { AttendeesInput } from "./FormsUI/AttendeesInput";
 import { initialValues, validationSchema } from "../../utils/utils";
 
 const AddEvent = () => {
-  const { createEvent } = useContext(EventsContext);
+  const { createEvent, getActiveRoute } = useContext(EventsContext);
   const { updateSnack } = useContext(SnackbarContext);
+
+  useEffect(() => {
+    getActiveRoute();
+  }, []);
 
   let navigate = useNavigate();
 
