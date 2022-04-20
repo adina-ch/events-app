@@ -14,8 +14,6 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 
-import styles from "./EventsList.module.scss";
-import "../../styles/globalStyles.scss";
 import {
   calculateColumns,
   sortEventsAscending,
@@ -26,8 +24,12 @@ import EventCard from "./Cards/EventCard";
 import Sort from "./Actions/Sort";
 import CustomSwitch from "./Actions/Switch";
 
+import styles from "./EventsList.module.scss";
+import "../../styles/globalStyles.scss";
+
 const EventsList = () => {
-  const { events, getEventsList, removeEvent } = useContext(EventsContext);
+  const { events, getEventsList, getActiveRoute, removeEvent } =
+    useContext(EventsContext);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortedAndFilteredEvents, setSortedAndFilteredEvents] =
@@ -38,6 +40,7 @@ const EventsList = () => {
 
   useEffect(() => {
     getEventsList();
+    getActiveRoute();
   }, []);
 
   useEffect(() => {

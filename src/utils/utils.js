@@ -23,6 +23,14 @@ const calcCurrentHour = () => {
   return moment().format("HH:mm");
 };
 
+const calcNow = () => {
+  return moment().format("YYYY-MM-DD HH:mm");
+};
+
+const calcNewDateWithParams = (date, time) => {
+  return new Date(`${date}T${time}`);
+};
+
 const calcInitialEndTime = () => {
   return moment().add(15, "minutes").format("HH:mm");
 };
@@ -49,8 +57,14 @@ export const validationSchema = Yup.object({
   startTime: Yup.string()
     .required("Start time is required")
     .test("is-greater", "Start time should be in the future", function (value) {
-      const currentHour = calcCurrentHour();
-      return moment(value, "HH:mm").isSameOrAfter(moment(currentHour, "HH:mm"));
+      const { date } = this.parent;
+
+      const formattedDate = moment(date).format("YYYY-MM-DD");
+
+      const chosenDate = calcNewDateWithParams(formattedDate, value);
+      const now = calcNow();
+
+      return moment(chosenDate, "YYYY-MM-DD HH:mm").isSameOrAfter(now);
     }),
   endTime: Yup.string()
     .required("End time is required")
@@ -154,4 +168,8 @@ export const sortEventsDescending = (events, sortCondition) => {
 
     return 0;
   });
+};
+
+export const formatDate = (date) => {
+  return moment(date).format("DD-MMM-YYYY");
 };

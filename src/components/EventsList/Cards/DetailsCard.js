@@ -9,6 +9,8 @@ import {
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
+import { formatDate } from "../../../utils/utils";
+
 import styles from "../EventsList.module.scss";
 
 const DetailsCard = ({ selectedEvent, handleDeleteEvent }) => {
@@ -46,7 +48,7 @@ const DetailsCard = ({ selectedEvent, handleDeleteEvent }) => {
         <Typography variant="h6">{title}</Typography>
 
         <Typography variant="body2" className={styles.cardText}>
-          Date: {date}
+          Date: {formatDate(date)}
         </Typography>
 
         <Typography variant="body2" className={styles.cardText}>

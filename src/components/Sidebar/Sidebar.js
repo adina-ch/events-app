@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
+
+import { EventsContext } from "../../EventsContext";
 
 import { NavLink } from "react-router-dom";
 
@@ -9,19 +11,10 @@ import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import styles from "./Sidebar.module.scss";
 
 const Sidebar = () => {
-  const [activeValue, setActiveValue] = useState(0);
+  const { activeRouteValue, setActiveRouteValue } = useContext(EventsContext);
 
-  useEffect(() => {
-    const pathName = window.location.pathname;
-    if (pathName === "/" && activeValue !== 0) {
-      setActiveValue(0);
-    } else if (pathName === "/add" && activeValue !== 1) {
-      setActiveValue(1);
-    }
-  }, [activeValue]);
-
-  const activeValueHandler = (e, value) => {
-    setActiveValue(value);
+  const activeValueHandler = (e, newValue) => {
+    setActiveRouteValue(newValue);
   };
 
   return (
@@ -34,7 +27,7 @@ const Sidebar = () => {
       <Tabs
         orientation="vertical"
         indicatorColor="primary"
-        value={activeValue}
+        value={activeRouteValue}
         onChange={activeValueHandler}
       >
         <Tab

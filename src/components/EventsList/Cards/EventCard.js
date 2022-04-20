@@ -7,6 +7,8 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Menu, MenuItem, Paper, Typography } from "@mui/material";
 import { IconButton, ListItemIcon, ListItemText } from "@mui/material";
 
+import { formatDate } from "../../../utils/utils";
+
 import styles from "../EventsList.module.scss";
 
 const EventCard = ({
@@ -92,7 +94,7 @@ const EventCard = ({
       <Typography variant="h6">{title}</Typography>
 
       <Typography variant="body2" className={styles.cardText}>
-        {date}, {startTime} - {endTime}
+        {formatDate(date)}, {startTime} - {endTime}
       </Typography>
 
       <Typography variant="body2" noWrap>
