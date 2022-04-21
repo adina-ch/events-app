@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+
+import { ModalContext } from "../../../contexts/ModalContext";
 
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
@@ -11,25 +13,30 @@ import { formatDate } from "../../../utils/utils";
 
 import styles from "../EventsList.module.scss";
 
-const EventCard = ({
-  eventItem,
-  handleShowDetails,
-  active,
-  handleModalVisibility,
-  setIdToBeDeleted,
-}) => {
+const EventCard = ({ eventItem, handleShowDetails, active }) => {
   const { title, date, startTime, endTime, description, id } = eventItem;
 
+  const { setOpenModal, setIdToBeDeleted } = useContext(ModalContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-    setIdToBeDeleted(id);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleDetailsVisibility = () => {
+    handleShowDetails();
+    handleClose();
+  };
+
+  const removeEvent = (id) => {
+    setIdToBeDeleted(id);
+    setOpenModal(true);
+    handleClose();
   };
 
   return (
@@ -60,12 +67,7 @@ const EventCard = ({
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
-          <MenuItem
-            onClick={() => {
-              handleShowDetails();
-              handleClose();
-            }}
-          >
+          <MenuItem onClick={handleDetailsVisibility}>
             <ListItemIcon>
               <InfoOutlinedIcon fontSize="small" />
             </ListItemIcon>
@@ -81,8 +83,7 @@ const EventCard = ({
 
           <MenuItem
             onClick={() => {
-              handleModalVisibility();
-              handleClose();
+              removeEvent(id);
             }}
           >
             <ListItemIcon>

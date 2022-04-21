@@ -1,5 +1,7 @@
 import { createContext, useContext, useState } from "react";
 
+import { EventsContext } from "../EventsContext";
+
 import {
   Button,
   Dialog,
@@ -9,47 +11,43 @@ import {
   DialogTitle,
   IconButton,
 } from "@mui/material";
-
 import CloseIcon from "@mui/icons-material/Close";
 
 import styles from "./styles/modal.module.scss";
-import { EventsContext } from "../EventsContext";
 
 export const ModalContext = createContext({});
 
 export const ModalProvider = ({ children }) => {
-  // state
-  // id of the item to be deleted -> initial null - updated from Event card when click on delete button
-  // const [open, setOpen] = useState(false);
-  const { removeEvent } = useContext(EventsContext);
-  const [open, setOpen] = useState(false);
+  const { removeEvent, selectedEvent, setSelectedEvent } =
+    useContext(EventsContext);
+  const [openModal, setOpenModal] = useState(false);
+  const [idToBeDeleted, setIdToBeDeleted] = useState(null);
 
   const handleClose = () => {
-    setOpen(false);
+    setOpenModal(false);
   };
 
   const handleRemoveEvent = () => {
-    // setOpen(false);
-    console.log("remove event from modal");
-    // removeEvent(id); ---> from events context
-    // id updated form event card
+    removeEvent(idToBeDeleted);
+    setOpenModal(false);
+
+    if (selectedEvent && selectedEvent.id === idToBeDeleted) {
+      setSelectedEvent(null);
+    }
   };
 
   return (
     <ModalContext.Provider
       value={{
-        setOpen,
-        handleClose,
+        setOpenModal,
         handleRemoveEvent,
-        // handleRemoveEvent to events list to be called in handleDeleteEvent function
-        // setOpen to be used in event card when clicked on delete icon
-        // id of the item to be deleted updated by Event card when click on delete button
+        setIdToBeDeleted,
       }}
     >
       {children}
       <div>
         <Dialog
-          open={open}
+          open={openModal}
           onClose={handleClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"

@@ -8,6 +8,7 @@ export const EventsContext = createContext();
 export const EventsProvider = (props) => {
   const [events, setEvents] = useState([]);
   const [activeRouteValue, setActiveRouteValue] = useState(0);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const { updateSnack } = useContext(SnackbarContext);
 
   const updateLoadedEvents = (data) => {
@@ -76,6 +77,8 @@ export const EventsProvider = (props) => {
         activeRouteValue,
         setActiveRouteValue,
         getActiveRoute,
+        selectedEvent,
+        setSelectedEvent,
       }}
     >
       {props.children}

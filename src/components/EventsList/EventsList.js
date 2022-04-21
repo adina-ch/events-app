@@ -26,21 +26,22 @@ import CustomSwitch from "./Actions/Switch";
 
 import styles from "./EventsList.module.scss";
 import "../../styles/globalStyles.scss";
-import DeleteModal from "./CardActions/DeleteModal";
 
 const EventsList = () => {
-  const { events, getEventsList, getActiveRoute, removeEvent } =
-    useContext(EventsContext);
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  const {
+    events,
+    getEventsList,
+    getActiveRoute,
+    selectedEvent,
+    setSelectedEvent,
+  } = useContext(EventsContext);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [sortedAndFilteredEvents, setSortedAndFilteredEvents] =
     useState(events);
   const [sortValue, setSortValue] = useState("none");
   const [active, setActive] = useState(null);
   const [isDescending, setIsDescending] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
-
-  const [idToBeDeleted, setIdToBeDeleted] = useState(null);
 
   useEffect(() => {
     getEventsList();
@@ -97,29 +98,8 @@ const EventsList = () => {
     setSortValue(e.target.value);
   };
 
-  const handleDeleteEvent = (id) => {
-    console.log("delete function in action");
-    removeEvent(id);
-
-    console.log(id);
-
-    if (selectedEvent && selectedEvent.id === id) {
-      setSelectedEvent(null);
-    }
-  };
-
-  const handleModalVisibility = () => {
-    setOpenModal(true);
-  };
-
   return (
     <>
-      <DeleteModal
-        openModal={openModal}
-        setOpenModal={setOpenModal}
-        idToBeDeleted={idToBeDeleted}
-        handleDeleteEvent={handleDeleteEvent}
-      />
       <Toolbar />
       <Container className="container">
         <Typography variant="h1">Events</Typography>
@@ -166,8 +146,6 @@ const EventsList = () => {
                           handleShowDetails(eventItem.id);
                         }}
                         active={active}
-                        setIdToBeDeleted={setIdToBeDeleted}
-                        handleModalVisibility={handleModalVisibility}
                       />
                     </ListItem>
                   ))
@@ -189,10 +167,7 @@ const EventsList = () => {
 
           {selectedEvent && (
             <Grid item xs={6}>
-              <DetailsCard
-                selectedEvent={selectedEvent}
-                handleDeleteEvent={handleDeleteEvent}
-              />
+              <DetailsCard />
             </Grid>
           )}
         </Grid>

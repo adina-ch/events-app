@@ -1,3 +1,8 @@
+import { useContext } from "react";
+
+import { EventsContext } from "../../../EventsContext";
+import { ModalContext } from "../../../contexts/ModalContext";
+
 import {
   Chip,
   IconButton,
@@ -13,7 +18,9 @@ import { formatDate } from "../../../utils/utils";
 
 import styles from "../EventsList.module.scss";
 
-const DetailsCard = ({ selectedEvent, handleDeleteEvent }) => {
+const DetailsCard = () => {
+  const { setOpenModal, setIdToBeDeleted } = useContext(ModalContext);
+  const { selectedEvent } = useContext(EventsContext);
   const {
     title,
     date,
@@ -24,6 +31,11 @@ const DetailsCard = ({ selectedEvent, handleDeleteEvent }) => {
     description,
     id,
   } = selectedEvent;
+
+  const removeEvent = (id) => {
+    setOpenModal(true);
+    setIdToBeDeleted(id);
+  };
 
   return (
     <>
@@ -38,7 +50,7 @@ const DetailsCard = ({ selectedEvent, handleDeleteEvent }) => {
           <Tooltip title="Delete">
             <IconButton
               onClick={() => {
-                handleDeleteEvent(id);
+                removeEvent(id);
               }}
             >
               <DeleteOutlineOutlinedIcon fontSize="small" />
