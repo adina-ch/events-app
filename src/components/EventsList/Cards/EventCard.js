@@ -14,8 +14,9 @@ import styles from "../EventsList.module.scss";
 const EventCard = ({
   eventItem,
   handleShowDetails,
-  handleDeleteEvent,
   active,
+  handleModalVisibility,
+  setIdToBeDeleted,
 }) => {
   const { title, date, startTime, endTime, description, id } = eventItem;
 
@@ -24,6 +25,7 @@ const EventCard = ({
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+    setIdToBeDeleted(id);
   };
 
   const handleClose = () => {
@@ -79,7 +81,7 @@ const EventCard = ({
 
           <MenuItem
             onClick={() => {
-              handleDeleteEvent();
+              handleModalVisibility();
               handleClose();
             }}
           >
