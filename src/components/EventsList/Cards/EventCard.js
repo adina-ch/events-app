@@ -22,6 +22,7 @@ const EventCard = ({ eventItem, handleShowDetails, active }) => {
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+    event.stopPropagation();
   };
 
   const handleClose = () => {
@@ -45,6 +46,7 @@ const EventCard = ({ eventItem, handleShowDetails, active }) => {
       className={`${styles.card} ${styles.cardPaper} ${
         active === id ? styles.active : null
       }`}
+      onClick={handleShowDetails}
     >
       <div className={styles.cardActions}>
         <IconButton onClick={handleClick}>
@@ -60,7 +62,10 @@ const EventCard = ({ eventItem, handleShowDetails, active }) => {
           id="basic-menu"
           anchorEl={anchorEl}
           open={open}
-          onClose={handleClose}
+          onClose={(event) => {
+            event.stopPropagation();
+            handleClose();
+          }}
           MenuListProps={{
             "aria-labelledby": "basic-button",
           }}

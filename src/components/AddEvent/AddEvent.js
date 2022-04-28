@@ -18,9 +18,12 @@ import "../../styles/globalStyles.scss";
 import { EventsContext } from "../../EventsContext";
 import { SnackbarContext } from "../../contexts/SnackbarContext";
 import TextFieldWrapper from "./FormsUI/TextField";
-import DateTimePicker from "./FormsUI/DateTimePicker";
 import { AttendeesInput } from "./FormsUI/AttendeesInput";
 import { initialValues, validationSchema } from "../../utils/utils";
+
+import ResponsiveDatePicker from "./FormsUI/DatePicker";
+import StartTimePicker from "./FormsUI/StartTimePicker";
+import EndTimePicker from "./FormsUI/EndTimePicker";
 
 const AddEvent = () => {
   const { createEvent, getActiveRoute } = useContext(EventsContext);
@@ -69,7 +72,7 @@ const AddEvent = () => {
           validationSchema={validationSchema}
           onSubmit={onSubmit}
         >
-          {({ isSubmitting }) => {
+          {({ isSubmitting, isValid }) => {
             return (
               <Form>
                 <Grid container spacing={2}>
@@ -77,7 +80,7 @@ const AddEvent = () => {
                     <TextFieldWrapper name="title" label="Title*" />
                   </Grid>
                   <Grid item xs={6}>
-                    <DateTimePicker name="date" type="date" label="Date*" />
+                    <ResponsiveDatePicker name="date" />
                   </Grid>
 
                   <Grid item xs={6}>
@@ -85,11 +88,7 @@ const AddEvent = () => {
                   </Grid>
 
                   <Grid item xs={6}>
-                    <DateTimePicker
-                      name="startTime"
-                      type="time"
-                      label="Start time*"
-                    />
+                    <StartTimePicker name="startTime" />
                   </Grid>
 
                   <Grid item xs={6}>
@@ -97,11 +96,7 @@ const AddEvent = () => {
                   </Grid>
 
                   <Grid item xs={6}>
-                    <DateTimePicker
-                      name="endTime"
-                      type="time"
-                      label="End time*"
-                    />
+                    <EndTimePicker name="endTime" />
                   </Grid>
 
                   <Grid item xs={12}>
@@ -118,7 +113,7 @@ const AddEvent = () => {
                       <Button
                         variant="contained"
                         type="submit"
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !isValid}
                       >
                         Create
                       </Button>

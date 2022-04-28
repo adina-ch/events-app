@@ -11,28 +11,28 @@ export const SORT_FIELD_OPTIONS = [
   { value: "description", label: "Description", id: 4 },
 ];
 
-const calcYesterday = () => {
-  return moment().subtract(1, "days").toString();
-};
-
-const calcCurrentDate = () => {
-  return moment().format("YYYY-MM-DD");
-};
-
-const calcCurrentHour = () => {
-  return moment().format("HH:mm");
-};
-
-const calcNow = () => {
-  return moment().format("YYYY-MM-DD HH:mm");
-};
-
-const calcNewDateWithParams = (date, time) => {
+const getNewDateWithParams = (date, time) => {
   return new Date(`${date}T${time}`);
 };
 
-const calcInitialEndTime = () => {
-  return moment().add(15, "minutes").format("HH:mm");
+const getYesterday = () => {
+  return moment().subtract(1, "days").toString();
+};
+
+const getCurrentDate = () => {
+  return moment();
+};
+
+const getInitialStartTime = () => {
+  const currentHour = moment();
+  const initialStartTime = currentHour.add(60, "minutes").startOf("hour");
+
+  return initialStartTime;
+};
+
+const getInitialEndTime = () => {
+  const initialStartTime = getInitialStartTime();
+  return initialStartTime.add(30, "minutes");
 };
 
 export const initialValues = {
@@ -40,9 +40,9 @@ export const initialValues = {
   attendees: [],
   location: "",
   description: "",
-  date: calcCurrentDate(),
-  startTime: calcCurrentHour(),
-  endTime: calcInitialEndTime(),
+  date: getCurrentDate(),
+  startTime: getInitialStartTime(),
+  endTime: getInitialEndTime(),
 };
 
 export const validationSchema = Yup.object({
@@ -53,18 +53,22 @@ export const validationSchema = Yup.object({
   location: Yup.string().required("Location is required"),
   date: Yup.date()
     .required("Date is required")
-    .min(calcYesterday(), "Date cannot be in the past"),
+    .min(getYesterday(), "Date cannot be in the past"),
   startTime: Yup.string()
     .required("Start time is required")
     .test("is-greater", "Start time should be in the future", function (value) {
       const { date } = this.parent;
-
       const formattedDate = moment(date).format("YYYY-MM-DD");
+      const dateBasedOnStartTime = new Date(value);
+      const formattedStartTimeHour =
+        moment(dateBasedOnStartTime).format("HH:mm");
+      const chosenDate = getNewDateWithParams(
+        formattedDate,
+        formattedStartTimeHour
+      );
+      const now = new Date();
 
-      const chosenDate = calcNewDateWithParams(formattedDate, value);
-      const now = calcNow();
-
-      return moment(chosenDate, "YYYY-MM-DD HH:mm").isSameOrAfter(now);
+      return now < chosenDate;
     }),
   endTime: Yup.string()
     .required("End time is required")
@@ -73,7 +77,10 @@ export const validationSchema = Yup.object({
       "End time should be greater than start time",
       function (value) {
         const { startTime } = this.parent;
-        return moment(value, "HH:mm").isSameOrAfter(moment(startTime, "HH:mm"));
+        const startTimeDate = new Date(startTime);
+        const endTimeDate = new Date(value);
+
+        return startTimeDate < endTimeDate;
       }
     ),
 });
