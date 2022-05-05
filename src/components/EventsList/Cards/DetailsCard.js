@@ -14,12 +14,17 @@ import {
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
-import { formatDate } from "../../../utils/utils";
+import {
+  capitalizeWordFirstLetter,
+  formatDate,
+  formatHour,
+} from "../../../utils/utils";
 
 import styles from "../EventsList.module.scss";
 
 const DetailsCard = () => {
-  const { setOpenModal, setIdToBeDeleted } = useContext(ModalContext);
+  const { setOpenModal, setIdToBeDeleted, updateModalContent } =
+    useContext(ModalContext);
   const { selectedEvent } = useContext(EventsContext);
   const {
     title,
@@ -32,8 +37,14 @@ const DetailsCard = () => {
     id,
   } = selectedEvent;
 
-  const removeEvent = (id) => {
+  const handleDelete = (id, title) => {
     setOpenModal(true);
+    updateModalContent(
+      `Delete confirmation - ${capitalizeWordFirstLetter(title)}`,
+      "Do you really want to delete the event? This action cannot be undone.",
+      "CANCEL",
+      "DELETE"
+    );
     setIdToBeDeleted(id);
   };
 
@@ -50,21 +61,21 @@ const DetailsCard = () => {
           <Tooltip title="Delete">
             <IconButton
               onClick={() => {
-                removeEvent(id);
+                handleDelete(id, title);
               }}
             >
               <DeleteOutlineOutlinedIcon fontSize="small" />
             </IconButton>
           </Tooltip>
         </div>
-        <Typography variant="h6">{title}</Typography>
+        <Typography variant="h6">{capitalizeWordFirstLetter(title)}</Typography>
 
         <Typography variant="body2" className={styles.cardText}>
           Date: {formatDate(date)}
         </Typography>
 
         <Typography variant="body2" className={styles.cardText}>
-          Time: {startTime} - {endTime}
+          Time: {formatHour(startTime)} - {formatHour(endTime)}
         </Typography>
 
         <Typography variant="body2" className={styles.cardText}>

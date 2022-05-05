@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 
 import { NavLink, useNavigate } from "react-router-dom";
 
-import { Formik, Form } from "formik";
+import { Formik, Form, getIn, Field } from "formik";
 
 import {
   Button,
@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 
 import "../../styles/globalStyles.scss";
+import styles from "./addEvent.module.scss";
 
 import { EventsContext } from "../../EventsContext";
 import { SnackbarContext } from "../../contexts/SnackbarContext";
@@ -21,25 +22,23 @@ import TextFieldWrapper from "./FormsUI/TextField";
 import { AttendeesInput } from "./FormsUI/AttendeesInput";
 import { initialValues, validationSchema } from "../../utils/utils";
 
-import ResponsiveDatePicker from "./FormsUI/DatePicker";
-import StartTimePicker from "./FormsUI/StartTimePicker";
-import EndTimePicker from "./FormsUI/EndTimePicker";
+import ResponsiveDatePicker from "./FormsUI/ResponsiveDatePicker";
+import ResponsiveTimePicker from "./FormsUI/ResponsiveTimePicker";
 
 const AddEvent = () => {
-  const { createEvent, getActiveRoute } = useContext(EventsContext);
+  const { createEvent, getActiveRoute, eventToBeEdited, updateEvent } =
+    useContext(EventsContext);
   const { updateSnack } = useContext(SnackbarContext);
 
   useEffect(() => {
     getActiveRoute();
   }, []);
 
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
-  const onSubmit = (values, { resetForm }) => {
-    const { description } = values;
-
+  const handleCreateEvent = (event, description) => {
     createEvent({
-      ...values,
+      ...event,
       description: description || "No description provided",
     })
       .then((response) => {
@@ -49,9 +48,34 @@ const AddEvent = () => {
         updateSnack(
           "Something went wrong. Please try again later.",
           true,
-          "success"
+          "error"
         );
       });
+  };
+
+  const handleEditEvent = (id, event) => {
+    updateEvent(id, { ...event })
+      .then((response) => {
+        updateSnack("Event edited successfully!", true, "success");
+      })
+      .catch((error) => {
+        updateSnack(
+          "Something went wrong. Please try again later.",
+          true,
+          "error"
+        );
+      });
+  };
+
+  const onSubmit = (values, { resetForm }) => {
+    const { description } = values;
+
+    if (eventToBeEdited) {
+      handleEditEvent(eventToBeEdited.id, values);
+    } else {
+      handleCreateEvent(values, description);
+    }
+
     setTimeout(() => {
       updateSnack("", false, "success");
     }, 2500);
@@ -72,15 +96,21 @@ const AddEvent = () => {
           validationSchema={validationSchema}
           onSubmit={onSubmit}
         >
-          {({ isSubmitting, isValid }) => {
+          {({ isSubmitting, values, initialValues, setFieldValue }) => {
             return (
               <Form>
-                <Grid container spacing={2}>
+                <Grid container columnSpacing={5} rowSpacing={2}>
                   <Grid item xs={6}>
                     <TextFieldWrapper name="title" label="Title*" />
                   </Grid>
                   <Grid item xs={6}>
-                    <ResponsiveDatePicker name="date" />
+                    <ResponsiveDatePicker
+                      name="date"
+                      label="Date*"
+                      values={values}
+                      initialValues={initialValues}
+                      setFieldValue={setFieldValue}
+                    />
                   </Grid>
 
                   <Grid item xs={6}>
@@ -88,15 +118,24 @@ const AddEvent = () => {
                   </Grid>
 
                   <Grid item xs={6}>
-                    <StartTimePicker name="startTime" />
+                    <ResponsiveTimePicker
+                      name="startTime"
+                      label="Start Time*"
+                      values={values}
+                      setFieldValue={setFieldValue}
+                    />
                   </Grid>
 
                   <Grid item xs={6}>
                     <TextFieldWrapper name="location" label="Location*" />
                   </Grid>
-
                   <Grid item xs={6}>
-                    <EndTimePicker name="endTime" />
+                    <ResponsiveTimePicker
+                      name="endTime"
+                      label="End Time*"
+                      values={values}
+                      setFieldValue={setFieldValue}
+                    />
                   </Grid>
 
                   <Grid item xs={12}>
@@ -113,7 +152,7 @@ const AddEvent = () => {
                       <Button
                         variant="contained"
                         type="submit"
-                        disabled={isSubmitting || !isValid}
+                        disabled={isSubmitting}
                       >
                         Create
                       </Button>

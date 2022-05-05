@@ -22,12 +22,19 @@ export const ModalProvider = ({ children }) => {
     useContext(EventsContext);
   const [openModal, setOpenModal] = useState(false);
   const [idToBeDeleted, setIdToBeDeleted] = useState(null);
+  const [modalContent, setModalContent] = useState({
+    modalTitle: "",
+    modalContent: "",
+    cancelBtnText: "",
+    deleteBtnText: "",
+  });
 
   const handleClose = () => {
     setOpenModal(false);
   };
 
-  const handleRemoveEvent = () => {
+  const handleRemoveEvent = (event) => {
+    event.stopPropagation();
     removeEvent(idToBeDeleted);
     setOpenModal(false);
 
@@ -36,12 +43,27 @@ export const ModalProvider = ({ children }) => {
     }
   };
 
+  const updateModalContent = (
+    modalTitle,
+    modalText,
+    cancelBtnText,
+    deleteBtnText
+  ) => {
+    setModalContent({
+      modalTitle,
+      modalText,
+      cancelBtnText,
+      deleteBtnText,
+    });
+  };
+  const { modalTitle, modalText, cancelBtnText, deleteBtnText } = modalContent;
   return (
     <ModalContext.Provider
       value={{
         setOpenModal,
         handleRemoveEvent,
         setIdToBeDeleted,
+        updateModalContent,
       }}
     >
       {children}
@@ -59,16 +81,15 @@ export const ModalProvider = ({ children }) => {
           >
             <CloseIcon />
           </IconButton>
-          <DialogTitle id="alert-dialog-title">Delete confirmation</DialogTitle>
+          <DialogTitle id="alert-dialog-title">{modalTitle}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Do you really want to delete the event? This action cannot be
-              undone.
+              {modalText}
             </DialogContentText>
           </DialogContent>
-          <DialogActions>
+          <DialogActions className={styles.buttonsWrapper}>
             <Button onClick={handleClose} variant="outlined">
-              CANCEL
+              {cancelBtnText}
             </Button>
             <Button
               onClick={handleRemoveEvent}
@@ -76,7 +97,7 @@ export const ModalProvider = ({ children }) => {
               variant="contained"
               color="error"
             >
-              DELETE
+              {deleteBtnText}
             </Button>
           </DialogActions>
         </Dialog>

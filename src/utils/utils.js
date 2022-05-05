@@ -52,8 +52,8 @@ export const validationSchema = Yup.object({
     .min(1, "The event should have at least one attendee"),
   location: Yup.string().required("Location is required"),
   date: Yup.date()
-    .required("Date is required")
-    .min(getYesterday(), "Date cannot be in the past"),
+    .required("Start date is required")
+    .min(getYesterday(), "Start date cannot be in the past"),
   startTime: Yup.string()
     .required("Start time is required")
     .test("is-greater", "Start time should be in the future", function (value) {
@@ -179,4 +179,8 @@ export const sortEventsDescending = (events, sortCondition) => {
 
 export const formatDate = (date) => {
   return moment(date).format("DD-MMM-YYYY");
+};
+
+export const formatHour = (hour) => {
+  return moment(hour).format("HH:mm");
 };

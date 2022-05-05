@@ -9,16 +9,26 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Menu, MenuItem, Paper, Typography } from "@mui/material";
 import { IconButton, ListItemIcon, ListItemText } from "@mui/material";
 
-import { formatDate } from "../../../utils/utils";
+import {
+  capitalizeWordFirstLetter,
+  formatDate,
+  formatHour,
+} from "../../../utils/utils";
 
 import styles from "../EventsList.module.scss";
+import { useNavigate } from "react-router-dom";
+import { EventsContext } from "../../../EventsContext";
 
 const EventCard = ({ eventItem, handleShowDetails, active }) => {
   const { title, date, startTime, endTime, description, id } = eventItem;
 
-  const { setOpenModal, setIdToBeDeleted } = useContext(ModalContext);
+  const { setEventToBeEdited, updateEvent } = useContext(EventsContext);
+  const { setOpenModal, setIdToBeDeleted, updateModalContent } =
+    useContext(ModalContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+
+  const navigate = useNavigate();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -34,10 +44,23 @@ const EventCard = ({ eventItem, handleShowDetails, active }) => {
     handleClose();
   };
 
-  const removeEvent = (id) => {
+  const handleDelete = (id, title) => {
     setIdToBeDeleted(id);
     setOpenModal(true);
+    updateModalContent(
+      `Delete confirmation - ${capitalizeWordFirstLetter(title)}`,
+      "Do you really want to delete this event? This action cannot be undone.",
+      "CANCEL",
+      "DELETE"
+    );
     handleClose();
+  };
+
+  const handleEdit = (id, event) => {
+    handleClose();
+    setEventToBeEdited(event);
+
+    navigate("/add");
   };
 
   return (
@@ -79,7 +102,11 @@ const EventCard = ({ eventItem, handleShowDetails, active }) => {
             <ListItemText>Show details</ListItemText>
           </MenuItem>
 
-          <MenuItem onClick={handleClose}>
+          <MenuItem
+            onClick={() => {
+              handleEdit(id, eventItem);
+            }}
+          >
             <ListItemIcon>
               <EditOutlinedIcon fontSize="small" />
             </ListItemIcon>
@@ -87,8 +114,9 @@ const EventCard = ({ eventItem, handleShowDetails, active }) => {
           </MenuItem>
 
           <MenuItem
-            onClick={() => {
-              removeEvent(id);
+            onClick={(event) => {
+              event.stopPropagation();
+              handleDelete(id, title);
             }}
           >
             <ListItemIcon>
@@ -99,10 +127,10 @@ const EventCard = ({ eventItem, handleShowDetails, active }) => {
         </Menu>
       </div>
 
-      <Typography variant="h6">{title}</Typography>
+      <Typography variant="h6">{capitalizeWordFirstLetter(title)}</Typography>
 
       <Typography variant="body2" className={styles.cardText}>
-        {formatDate(date)}, {startTime} - {endTime}
+        {formatDate(date)}, {formatHour(startTime)} - {formatHour(endTime)}
       </Typography>
 
       <Typography variant="body2" noWrap>
