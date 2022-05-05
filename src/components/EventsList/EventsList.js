@@ -28,9 +28,14 @@ import styles from "./EventsList.module.scss";
 import "../../styles/globalStyles.scss";
 
 const EventsList = () => {
-  const { events, getEventsList, getActiveRoute, removeEvent } =
-    useContext(EventsContext);
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  const {
+    events,
+    getEventsList,
+    getActiveRoute,
+    selectedEvent,
+    setSelectedEvent,
+  } = useContext(EventsContext);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [sortedAndFilteredEvents, setSortedAndFilteredEvents] =
     useState(events);
@@ -93,14 +98,6 @@ const EventsList = () => {
     setSortValue(e.target.value);
   };
 
-  const handleDeleteEvent = (id) => {
-    removeEvent(id);
-
-    if (selectedEvent && selectedEvent.id === id) {
-      setSelectedEvent(null);
-    }
-  };
-
   return (
     <>
       <Toolbar />
@@ -148,9 +145,6 @@ const EventsList = () => {
                         handleShowDetails={() => {
                           handleShowDetails(eventItem.id);
                         }}
-                        handleDeleteEvent={() => {
-                          handleDeleteEvent(eventItem.id);
-                        }}
                         active={active}
                       />
                     </ListItem>
@@ -173,10 +167,7 @@ const EventsList = () => {
 
           {selectedEvent && (
             <Grid item xs={6}>
-              <DetailsCard
-                selectedEvent={selectedEvent}
-                handleDeleteEvent={handleDeleteEvent}
-              />
+              <DetailsCard />
             </Grid>
           )}
         </Grid>

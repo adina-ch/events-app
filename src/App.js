@@ -11,6 +11,7 @@ import Header from "./components/Header/Header";
 import Sidebar from "./components/Sidebar/Sidebar";
 import AddEvent from "./components/AddEvent/AddEvent";
 import EventsList from "./components/EventsList/EventsList";
+import { ModalProvider } from "./contexts/ModalContext";
 
 const App = () => {
   return (
@@ -21,7 +22,14 @@ const App = () => {
             <Header />
             <Sidebar />
             <Routes>
-              <Route path="/" element={<EventsList />} />
+              <Route
+                path="/"
+                element={
+                  <ModalProvider>
+                    <EventsList />
+                  </ModalProvider>
+                }
+              />
               <Route path="/add" element={<AddEvent />} />
             </Routes>
           </BrowserRouter>

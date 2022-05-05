@@ -1,0 +1,12 @@
+@import "../../styles/variables";
+
+button.closeBtn {
+  position: absolute;
+  right: 8px;
+  top: 12px;
+  color: $grey-500;
+}
+
+div.buttonsWrapper {
+  padding: 16px 24px;
+}

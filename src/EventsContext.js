@@ -1,6 +1,6 @@
 import { useState, createContext, useContext } from "react";
 
-import { addEvent, fetchEvents, deleteEvent } from "./API/events";
+import { addEvent, fetchEvents, deleteEvent, editEvent } from "./API/events";
 import { SnackbarContext } from "./contexts/SnackbarContext";
 
 export const EventsContext = createContext();
@@ -8,6 +8,8 @@ export const EventsContext = createContext();
 export const EventsProvider = (props) => {
   const [events, setEvents] = useState([]);
   const [activeRouteValue, setActiveRouteValue] = useState(0);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [eventToBeEdited, setEventToBeEdited] = useState(null);
   const { updateSnack } = useContext(SnackbarContext);
 
   const updateLoadedEvents = (data) => {
@@ -35,6 +37,21 @@ export const EventsProvider = (props) => {
       await addEvent(event);
       getEventsList();
     } catch (error) {
+      return error;
+    }
+  };
+
+  const updateEvent = async (eventId, event) => {
+    try {
+      await editEvent(eventId, event);
+      getEventsList();
+      updateSnack("Event was updated successfully!", true, "success");
+    } catch (error) {
+      updateSnack(
+        "Could not update the specified event. Please try again later",
+        true,
+        "error"
+      );
       return error;
     }
   };
@@ -76,6 +93,11 @@ export const EventsProvider = (props) => {
         activeRouteValue,
         setActiveRouteValue,
         getActiveRoute,
+        selectedEvent,
+        setSelectedEvent,
+        updateEvent,
+        eventToBeEdited,
+        setEventToBeEdited,
       }}
     >
       {props.children}
