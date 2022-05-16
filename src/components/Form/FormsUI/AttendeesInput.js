@@ -8,7 +8,13 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import { fetchAttendees } from "../../../API/attendees";
 
-export const AttendeesInput = ({ name, label, value, ...otherProps }) => {
+export const AttendeesInput = ({
+  name,
+  label,
+  value,
+  attendeesDefaultValue,
+  ...otherProps
+}) => {
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState([]);
   const loading = open && options.length === 0;
@@ -75,6 +81,7 @@ export const AttendeesInput = ({ name, label, value, ...otherProps }) => {
       onChange={handleChange}
       isOptionEqualToValue={(option, value) => option.name === value.name}
       getOptionLabel={(option) => option.name}
+      defaultValue={attendeesDefaultValue}
       options={options}
       loading={loading}
       name={name}

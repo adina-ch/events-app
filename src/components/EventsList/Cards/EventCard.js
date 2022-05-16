@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 
 import { ModalContext } from "../../../contexts/ModalContext";
 
@@ -22,7 +22,7 @@ import { EventsContext } from "../../../EventsContext";
 const EventCard = ({ eventItem, handleShowDetails, active }) => {
   const { title, date, startTime, endTime, description, id } = eventItem;
 
-  const { setEventToBeEdited, updateEvent } = useContext(EventsContext);
+  const { setEventId } = useContext(EventsContext);
   const { setOpenModal, setIdToBeDeleted, updateModalContent } =
     useContext(ModalContext);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -56,11 +56,11 @@ const EventCard = ({ eventItem, handleShowDetails, active }) => {
     handleClose();
   };
 
-  const handleEdit = (id, event) => {
+  const handleEdit = (id) => {
     handleClose();
-    setEventToBeEdited(event);
+    setEventId(id);
 
-    navigate("/add");
+    navigate(`edit/${id}`);
   };
 
   return (
@@ -104,7 +104,7 @@ const EventCard = ({ eventItem, handleShowDetails, active }) => {
 
           <MenuItem
             onClick={() => {
-              handleEdit(id, eventItem);
+              handleEdit(id);
             }}
           >
             <ListItemIcon>
