@@ -22,7 +22,7 @@ import { EventsContext } from "../../../EventsContext";
 const EventCard = ({ eventItem, handleShowDetails, active }) => {
   const { title, date, startTime, endTime, description, id } = eventItem;
 
-  const { setEventId } = useContext(EventsContext);
+  const { setEventIdToBeEdited } = useContext(EventsContext);
   const { setOpenModal, setIdToBeDeleted, updateModalContent } =
     useContext(ModalContext);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -58,7 +58,7 @@ const EventCard = ({ eventItem, handleShowDetails, active }) => {
 
   const handleEdit = (id) => {
     handleClose();
-    setEventId(id);
+    setEventIdToBeEdited(id);
 
     navigate(`edit/${id}`);
   };
@@ -103,8 +103,9 @@ const EventCard = ({ eventItem, handleShowDetails, active }) => {
           </MenuItem>
 
           <MenuItem
-            onClick={() => {
+            onClick={(event) => {
               handleEdit(id);
+              event.stopPropagation();
             }}
           >
             <ListItemIcon>

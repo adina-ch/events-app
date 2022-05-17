@@ -22,6 +22,8 @@ const ResponsiveDatePicker = ({
         onChange={(newValue) => {
           setFieldValue(name, newValue);
         }}
+        inputFormat="dd-MM-yyyy"
+        mask={"__-__-____"}
         renderInput={(params) => <TextField {...params} fullWidth={true} />}
       />
     </LocalizationProvider>

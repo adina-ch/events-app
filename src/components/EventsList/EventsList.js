@@ -46,6 +46,8 @@ const EventsList = () => {
   useEffect(() => {
     getEventsList();
     getActiveRoute();
+
+    selectedEvent && setActive(selectedEvent.id);
   }, []);
 
   useEffect(() => {

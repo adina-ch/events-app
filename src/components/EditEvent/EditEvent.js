@@ -11,7 +11,7 @@ import EventForm from "../Form/EventForm";
 import { fetchEventToBeEdited } from "../../API/events";
 
 const EditEvent = () => {
-  const { updateEvent, getActiveRoute } = useContext(EventsContext);
+  const { updateEvent, setActiveRouteValue } = useContext(EventsContext);
   const { updateSnack } = useContext(SnackbarContext);
 
   const [eventToBeEdited, setEventToBeEdited] = useState(null);
@@ -21,7 +21,7 @@ const EditEvent = () => {
   const { id: eventIdFromUrl } = useParams();
 
   useEffect(() => {
-    getActiveRoute();
+    setActiveRouteValue(false);
 
     setLoading(true);
 

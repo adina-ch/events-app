@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 import { EventsContext } from "../../../EventsContext";
 import { ModalContext } from "../../../contexts/ModalContext";
@@ -21,11 +21,13 @@ import {
 } from "../../../utils/utils";
 
 import styles from "../EventsList.module.scss";
+import { useNavigate } from "react-router-dom";
 
 const DetailsCard = () => {
   const { setOpenModal, setIdToBeDeleted, updateModalContent } =
     useContext(ModalContext);
-  const { selectedEvent } = useContext(EventsContext);
+  const { selectedEvent, setSelectedEvent, setEventIdToBeEdited } =
+    useContext(EventsContext);
   const {
     title,
     date,
@@ -36,6 +38,8 @@ const DetailsCard = () => {
     description,
     id,
   } = selectedEvent;
+
+  const navigate = useNavigate();
 
   const handleDelete = (id, title) => {
     setOpenModal(true);
@@ -48,13 +52,23 @@ const DetailsCard = () => {
     setIdToBeDeleted(id);
   };
 
+  const handleEdit = (id) => {
+    setEventIdToBeEdited(id);
+
+    navigate(`edit/${id}`);
+  };
+
   return (
     <>
       <Typography variant="h2">Selected event</Typography>
       <Paper variant="outlined" className={styles.card}>
         <div className={styles.cardActions}>
           <Tooltip title="Edit">
-            <IconButton>
+            <IconButton
+              onClick={() => {
+                handleEdit(id);
+              }}
+            >
               <EditOutlinedIcon fontSize="small" />
             </IconButton>
           </Tooltip>
