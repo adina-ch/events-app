@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
 import { EventsProvider } from "./EventsContext";
 import { SnackbarProvider } from "./contexts/SnackbarContext";
@@ -34,7 +34,8 @@ const App = () => {
               ></Route>
               <Route path="/add" element={<AddEvent />} />
               <Route path="/edit/:id" element={<EditEvent />} />
-              <Route path="*" element={<ErrorPage />} />
+              <Route path="/error" element={<ErrorPage />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </BrowserRouter>
         </EventsProvider>

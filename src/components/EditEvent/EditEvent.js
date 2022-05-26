@@ -28,14 +28,17 @@ const EditEvent = () => {
     if (eventIdFromUrl) {
       fetchEventToBeEdited(eventIdFromUrl)
         .then((result) => {
-          setLoading(false);
-          setEventToBeEdited(result);
+          if (result) {
+            setLoading(false);
+            setEventToBeEdited(result);
+          } else {
+            navigate("/error");
+          }
         })
         .catch((err) => {
           setLoading(false);
+          console.log(err);
         });
-    } else {
-      navigate("/not-found");
     }
   }, []);
 
@@ -64,18 +67,15 @@ const EditEvent = () => {
   };
 
   return (
-    <>
-      {eventToBeEdited && (
-        <EventForm
-          pageTitle="Edit event"
-          onSubmit={handleSubmit}
-          submitBtnText="EDIT"
-          cancelBtnText="CANCEL"
-          initialValues={eventToBeEdited}
-          attendeesDefaultValue={eventToBeEdited.attendees}
-        />
-      )}
-    </>
+    eventToBeEdited && (
+      <EventForm
+        pageTitle="Edit event"
+        onSubmit={handleSubmit}
+        submitBtnText="EDIT"
+        cancelBtnText="CANCEL"
+        initialValues={eventToBeEdited}
+      />
+    )
   );
 };
 

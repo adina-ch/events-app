@@ -26,7 +26,6 @@ const EventForm = ({
   submitBtnText,
   cancelBtnText,
   initialValues,
-  attendeesDefaultValue,
 }) => {
   return (
     <>
@@ -39,7 +38,7 @@ const EventForm = ({
           validationSchema={validationSchema}
           onSubmit={onSubmit}
         >
-          {({ isSubmitting, values, setFieldValue }) => {
+          {({ isSubmitting, values, setFieldValue, errors }) => {
             return (
               <Form>
                 <Grid container columnSpacing={5} rowSpacing={2}>
@@ -50,9 +49,10 @@ const EventForm = ({
                     <ResponsiveDatePicker
                       name="date"
                       label="Date*"
-                      values={values}
-                      initialValues={initialValues}
+                      value={values.date}
+                      minDate={initialValues.date}
                       setFieldValue={setFieldValue}
+                      errors={errors}
                     />
                   </Grid>
 
@@ -60,7 +60,7 @@ const EventForm = ({
                     <AttendeesInput
                       name="attendees"
                       label="Attendees*"
-                      attendeesDefaultValue={attendeesDefaultValue}
+                      attendeesDefaultValue={initialValues.attendees}
                     />
                   </Grid>
 
@@ -68,8 +68,9 @@ const EventForm = ({
                     <ResponsiveTimePicker
                       name="startTime"
                       label="Start Time*"
-                      values={values}
+                      value={values.startTime}
                       setFieldValue={setFieldValue}
+                      errors={errors}
                     />
                   </Grid>
 
@@ -80,8 +81,9 @@ const EventForm = ({
                     <ResponsiveTimePicker
                       name="endTime"
                       label="End Time*"
-                      values={values}
+                      value={values.endTime}
                       setFieldValue={setFieldValue}
+                      errors={errors}
                     />
                   </Grid>
 

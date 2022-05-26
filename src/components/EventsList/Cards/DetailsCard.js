@@ -26,8 +26,7 @@ import { useNavigate } from "react-router-dom";
 const DetailsCard = () => {
   const { setOpenModal, setIdToBeDeleted, updateModalContent } =
     useContext(ModalContext);
-  const { selectedEvent, setSelectedEvent, setEventIdToBeEdited } =
-    useContext(EventsContext);
+  const { selectedEvent } = useContext(EventsContext);
   const {
     title,
     date,
@@ -53,8 +52,6 @@ const DetailsCard = () => {
   };
 
   const handleEdit = (id) => {
-    setEventIdToBeEdited(id);
-
     navigate(`edit/${id}`);
   };
 

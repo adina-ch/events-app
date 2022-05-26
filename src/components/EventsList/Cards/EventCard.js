@@ -17,12 +17,10 @@ import {
 
 import styles from "../EventsList.module.scss";
 import { useNavigate } from "react-router-dom";
-import { EventsContext } from "../../../EventsContext";
 
 const EventCard = ({ eventItem, handleShowDetails, active }) => {
   const { title, date, startTime, endTime, description, id } = eventItem;
 
-  const { setEventIdToBeEdited } = useContext(EventsContext);
   const { setOpenModal, setIdToBeDeleted, updateModalContent } =
     useContext(ModalContext);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -57,9 +55,6 @@ const EventCard = ({ eventItem, handleShowDetails, active }) => {
   };
 
   const handleEdit = (id) => {
-    handleClose();
-    setEventIdToBeEdited(id);
-
     navigate(`edit/${id}`);
   };
 

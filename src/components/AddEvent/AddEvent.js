@@ -58,7 +58,6 @@ const AddEvent = () => {
       submitBtnText="CREATE"
       cancelBtnText="CANCEL"
       initialValues={initialValues}
-      attendeesDefaultValue={initialValues.attendees}
     />
   );
 };
