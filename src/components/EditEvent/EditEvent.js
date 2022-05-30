@@ -37,7 +37,6 @@ const EditEvent = () => {
         })
         .catch((err) => {
           setLoading(false);
-          console.log(err);
         });
     }
   }, []);

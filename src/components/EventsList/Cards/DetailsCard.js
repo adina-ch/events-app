@@ -1,7 +1,6 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 
 import { EventsContext } from "../../../EventsContext";
-import { ModalContext } from "../../../contexts/ModalContext";
 
 import {
   Chip,
@@ -23,9 +22,11 @@ import {
 import styles from "../EventsList.module.scss";
 import { useNavigate } from "react-router-dom";
 
-const DetailsCard = () => {
-  const { setOpenModal, setIdToBeDeleted, updateModalContent } =
-    useContext(ModalContext);
+const DetailsCard = ({
+  setIdToBeDeleted,
+  handleModalVisibility,
+  updateModalContent,
+}) => {
   const { selectedEvent } = useContext(EventsContext);
   const {
     title,
@@ -40,15 +41,15 @@ const DetailsCard = () => {
 
   const navigate = useNavigate();
 
-  const handleDelete = (id, title) => {
-    setOpenModal(true);
+  const handleDelete = (id) => {
+    setIdToBeDeleted(id);
+    handleModalVisibility();
     updateModalContent(
       `Delete confirmation - ${capitalizeWordFirstLetter(title)}`,
-      "Do you really want to delete the event? This action cannot be undone.",
+      "Do you really want to delete this event? This action cannot be undone.",
       "CANCEL",
       "DELETE"
     );
-    setIdToBeDeleted(id);
   };
 
   const handleEdit = (id) => {
@@ -72,7 +73,7 @@ const DetailsCard = () => {
           <Tooltip title="Delete">
             <IconButton
               onClick={() => {
-                handleDelete(id, title);
+                handleDelete(id);
               }}
             >
               <DeleteOutlineOutlinedIcon fontSize="small" />

@@ -26,6 +26,7 @@ import CustomSwitch from "./Actions/Switch";
 
 import styles from "./EventsList.module.scss";
 import "../../styles/globalStyles.scss";
+import DeleteModal from "./DeleteModal/DeleteModal";
 
 const EventsList = () => {
   const {
@@ -34,6 +35,7 @@ const EventsList = () => {
     getActiveRoute,
     selectedEvent,
     setSelectedEvent,
+    removeEvent,
   } = useContext(EventsContext);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -42,6 +44,14 @@ const EventsList = () => {
   const [sortValue, setSortValue] = useState("none");
   const [active, setActive] = useState(null);
   const [isDescending, setIsDescending] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [idToBeDeleted, setIdToBeDeleted] = useState(null);
+  const [modalContent, setModalContent] = useState({
+    modalTitle: "",
+    modalContent: "",
+    cancelBtnText: "",
+    deleteBtnText: "",
+  });
 
   useEffect(() => {
     getEventsList();
@@ -100,8 +110,44 @@ const EventsList = () => {
     setSortValue(e.target.value);
   };
 
+  const handleDeleteEvent = () => {
+    removeEvent(idToBeDeleted);
+    setOpenModal(false);
+
+    if (selectedEvent && selectedEvent.id === idToBeDeleted) {
+      setSelectedEvent(null);
+    }
+  };
+
+  const handleCancel = () => {};
+
+  const handleModalVisibility = () => {
+    setOpenModal(true);
+  };
+
+  const updateModalContent = (
+    modalTitle,
+    modalText,
+    cancelBtnText,
+    confirmBtnText
+  ) => {
+    setModalContent({
+      modalTitle,
+      modalText,
+      cancelBtnText,
+      confirmBtnText,
+    });
+  };
+
   return (
     <>
+      <DeleteModal
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+        onConfirm={handleDeleteEvent}
+        onCancel={handleCancel}
+        modalContent={modalContent}
+      />
       <Toolbar />
       <Container className="container">
         <Typography variant="h1">Events</Typography>
@@ -148,6 +194,9 @@ const EventsList = () => {
                           handleShowDetails(eventItem.id);
                         }}
                         active={active}
+                        setIdToBeDeleted={setIdToBeDeleted}
+                        handleModalVisibility={handleModalVisibility}
+                        updateModalContent={updateModalContent}
                       />
                     </ListItem>
                   ))
@@ -169,7 +218,11 @@ const EventsList = () => {
 
           {selectedEvent && (
             <Grid item xs={6}>
-              <DetailsCard />
+              <DetailsCard
+                setIdToBeDeleted={setIdToBeDeleted}
+                handleModalVisibility={handleModalVisibility}
+                updateModalContent={updateModalContent}
+              />
             </Grid>
           )}
         </Grid>
