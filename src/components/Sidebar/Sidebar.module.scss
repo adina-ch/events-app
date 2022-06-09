@@ -3,3 +3,16 @@
 div .menuItem {
   padding: $default-padding * 2;
 }
+
+.rightAligned {
+  margin-left: auto;
+}
+
+.logo {
+  width: 100%;
+}
+
+.logoText {
+  text-align: center;
+  padding: $default-padding;
+}

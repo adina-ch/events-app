@@ -2,8 +2,6 @@ import { useContext, useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import "../../styles/globalStyles.scss";
-
 import { EventsContext } from "../../EventsContext";
 import { SnackbarContext } from "../../contexts/SnackbarContext";
 import EventForm from "../Form/EventForm";

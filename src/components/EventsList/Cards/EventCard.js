@@ -50,7 +50,7 @@ const EventCard = ({
     handleModalVisibility();
     handleClose();
     updateModalContent(
-      `Delete confirmation - ${capitalizeWordFirstLetter(title)}`,
+      `Delete confirmation for: ${capitalizeWordFirstLetter(title)}`,
       "Do you really want to delete this event? This action cannot be undone.",
       "CANCEL",
       "DELETE"

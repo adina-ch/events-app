@@ -39,7 +39,9 @@ const DeleteModal = ({
         >
           <CloseIcon />
         </IconButton>
-        <DialogTitle id="alert-dialog-title">{modalTitle}</DialogTitle>
+        <DialogTitle id="alert-dialog-title" className={styles.modalTitle}>
+          {modalTitle}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             {modalText}

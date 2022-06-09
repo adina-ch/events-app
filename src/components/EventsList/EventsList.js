@@ -3,16 +3,14 @@ import { useContext, useState, useEffect } from "react";
 import { EventsContext } from "../../EventsContext";
 
 import {
-  Container,
   Grid,
   List,
   ListItem,
   Stack,
   TextField,
-  Toolbar,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
-import { Box } from "@mui/system";
 
 import {
   calculateColumns,
@@ -25,7 +23,6 @@ import Sort from "./Actions/Sort";
 import CustomSwitch from "./Actions/Switch";
 
 import styles from "./EventsList.module.scss";
-import "../../styles/globalStyles.scss";
 import DeleteModal from "./DeleteModal/DeleteModal";
 
 const EventsList = () => {
@@ -83,6 +80,8 @@ const EventsList = () => {
     }
     setSortedAndFilteredEvents(sortedAndFiltered);
   }, [events, searchTerm, sortValue, isDescending]);
+
+  const largeScreen = useMediaQuery((theme) => theme.breakpoints.up("sm"));
 
   const handleShowDetails = (id) => {
     const selected = events.find((eventItem) => eventItem.id === id);
@@ -148,85 +147,82 @@ const EventsList = () => {
         onCancel={handleCancel}
         modalContent={modalContent}
       />
-      <Toolbar />
-      <Container className="container">
-        <Typography variant="h1">Events</Typography>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              placeholder="Search event..."
-              InputProps={{
-                type: "search",
-              }}
-              fullWidth={true}
-              onChange={handleSearch}
-              value={searchTerm}
+
+      <Typography variant="h1">Events</Typography>
+      <Grid container spacing={2} className={styles.eventsContainer}>
+        <Grid item xs={12}>
+          <TextField
+            placeholder="Search event..."
+            InputProps={{
+              type: "search",
+            }}
+            fullWidth={true}
+            onChange={handleSearch}
+            value={searchTerm}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Stack direction={largeScreen ? "row" : "column"} spacing={3}>
+            <Sort
+              value={sortValue}
+              handleChange={handleSortValue}
+              defaultVal={sortValue}
+            />
+            {sortValue !== "none" && (
+              <CustomSwitch
+                isDescending={isDescending}
+                handleChange={getSortOrder}
+              />
+            )}
+          </Stack>
+        </Grid>
+
+        <Grid item xs={12} md={calculateColumns(selectedEvent)}>
+          <Typography variant="h2">
+            {events.length > 0 ? "Upcoming events" : "No upcoming events"}
+          </Typography>
+
+          <List className={styles.cardsList}>
+            {events.length > 0 ? (
+              sortedAndFilteredEvents.map((eventItem) => (
+                <ListItem key={eventItem.id}>
+                  <EventCard
+                    eventItem={eventItem}
+                    handleShowDetails={() => {
+                      handleShowDetails(eventItem.id);
+                    }}
+                    active={active}
+                    setIdToBeDeleted={setIdToBeDeleted}
+                    handleModalVisibility={handleModalVisibility}
+                    updateModalContent={updateModalContent}
+                  />
+                </ListItem>
+              ))
+            ) : (
+              <Typography variant="body1" className={styles.resultsBox}>
+                You have no events in the list.
+              </Typography>
+            )}
+
+            {sortedAndFilteredEvents.length === 0 && searchTerm && (
+              <Typography variant="body1" className={styles.resultsBox}>
+                We couldn't find any matches for "{searchTerm}". Please try a
+                different search term.
+              </Typography>
+            )}
+          </List>
+        </Grid>
+
+        {selectedEvent && (
+          <Grid item xs={12} md={6}>
+            <DetailsCard
+              setIdToBeDeleted={setIdToBeDeleted}
+              handleModalVisibility={handleModalVisibility}
+              updateModalContent={updateModalContent}
             />
           </Grid>
-          <Grid item xs={12}>
-            <Stack direction="row" spacing={3} alignItems="center">
-              <Sort
-                value={sortValue}
-                handleChange={handleSortValue}
-                defaultVal={sortValue}
-              />
-              {sortValue !== "none" && (
-                <CustomSwitch
-                  isDescending={isDescending}
-                  handleChange={getSortOrder}
-                />
-              )}
-            </Stack>
-          </Grid>
-
-          <Grid item xs={calculateColumns(selectedEvent)}>
-            <Typography variant="h2">
-              {events.length > 0 ? "Upcoming events" : "No upcoming events"}
-            </Typography>
-            <Box>
-              <List className={styles.cardsList}>
-                {events.length > 0 ? (
-                  sortedAndFilteredEvents.map((eventItem) => (
-                    <ListItem key={eventItem.id}>
-                      <EventCard
-                        eventItem={eventItem}
-                        handleShowDetails={() => {
-                          handleShowDetails(eventItem.id);
-                        }}
-                        active={active}
-                        setIdToBeDeleted={setIdToBeDeleted}
-                        handleModalVisibility={handleModalVisibility}
-                        updateModalContent={updateModalContent}
-                      />
-                    </ListItem>
-                  ))
-                ) : (
-                  <Typography variant="body1" className={styles.resultsBox}>
-                    You have no events in the list.
-                  </Typography>
-                )}
-
-                {sortedAndFilteredEvents.length === 0 && searchTerm && (
-                  <Typography variant="body1" className={styles.resultsBox}>
-                    We couldn't find any matches for "{searchTerm}". Please try
-                    a different search term.
-                  </Typography>
-                )}
-              </List>
-            </Box>
-          </Grid>
-
-          {selectedEvent && (
-            <Grid item xs={6}>
-              <DetailsCard
-                setIdToBeDeleted={setIdToBeDeleted}
-                handleModalVisibility={handleModalVisibility}
-                updateModalContent={updateModalContent}
-              />
-            </Grid>
-          )}
-        </Grid>
-      </Container>
+        )}
+      </Grid>
     </>
   );
 };
