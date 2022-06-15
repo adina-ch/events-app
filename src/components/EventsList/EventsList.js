@@ -24,6 +24,7 @@ import CustomSwitch from "./Actions/Switch";
 
 import styles from "./EventsList.module.scss";
 import DeleteModal from "./DeleteModal/DeleteModal";
+import { fetchEventToBeEdited } from "../../API/events";
 
 const EventsList = () => {
   const {
@@ -55,6 +56,19 @@ const EventsList = () => {
     getActiveRoute();
 
     selectedEvent && setActive(selectedEvent.id);
+
+    if (selectedEvent) {
+      fetchEventToBeEdited(selectedEvent.id)
+        .then((result) => {
+          if (result) {
+            const selected = { ...result, id: selectedEvent.id };
+            setSelectedEvent(selected);
+          }
+        })
+        .catch((err) => {
+          return err;
+        });
+    }
   }, []);
 
   useEffect(() => {
@@ -149,6 +163,7 @@ const EventsList = () => {
       />
 
       <Typography variant="h1">Events</Typography>
+
       <Grid container spacing={2} className={styles.eventsContainer}>
         <Grid item xs={12}>
           <TextField
@@ -177,7 +192,12 @@ const EventsList = () => {
           </Stack>
         </Grid>
 
-        <Grid item xs={12} md={calculateColumns(selectedEvent)}>
+        <Grid
+          item
+          xs={12}
+          md={calculateColumns(selectedEvent)}
+          order={{ xs: 4, md: 3 }}
+        >
           <Typography variant="h2">
             {events.length > 0 ? "Upcoming events" : "No upcoming events"}
           </Typography>
@@ -214,7 +234,7 @@ const EventsList = () => {
         </Grid>
 
         {selectedEvent && (
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6} order={{ xs: 3, md: 4 }}>
             <DetailsCard
               setIdToBeDeleted={setIdToBeDeleted}
               handleModalVisibility={handleModalVisibility}

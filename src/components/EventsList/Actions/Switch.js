@@ -49,13 +49,13 @@ const CustomSwitch = ({ isDescending, handleChange }) => {
 
   return (
     <Stack direction="row" spacing={1} alignItems="center">
-      <Typography>Ascending</Typography>
+      <Typography variant="body2">Ascending</Typography>
       <MaterialUISwitch
         checked={isDescending}
         onChange={onChange}
         inputProps={{ "aria-label": "controlled" }}
       />
-      <Typography>Descending</Typography>
+      <Typography variant="body2">Descending</Typography>
     </Stack>
   );
 };

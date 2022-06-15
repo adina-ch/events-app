@@ -27,7 +27,7 @@ const DetailsCard = ({
   handleModalVisibility,
   updateModalContent,
 }) => {
-  const { selectedEvent } = useContext(EventsContext);
+  const { selectedEvent, setEventIdToBeEdited } = useContext(EventsContext);
   const {
     title,
     date,
@@ -53,6 +53,7 @@ const DetailsCard = ({
   };
 
   const handleEdit = (id) => {
+    setEventIdToBeEdited(id);
     navigate(`edit/${id}`);
   };
 
@@ -63,8 +64,9 @@ const DetailsCard = ({
         <div className={styles.cardActions}>
           <Tooltip title="Edit">
             <IconButton
-              onClick={() => {
+              onClick={(event) => {
                 handleEdit(id);
+                event.stopPropagation();
               }}
             >
               <EditOutlinedIcon fontSize="small" />
@@ -94,9 +96,13 @@ const DetailsCard = ({
           Attendees:
         </Typography>
 
-        <Stack direction="row" spacing={1}>
+        <Stack direction="row" spacing={1} className={styles.attendeesWrapper}>
           {attendees.map((attendee, index) => (
-            <Chip label={attendee.name} key={index} />
+            <Chip
+              label={attendee.name}
+              key={index}
+              className={styles.attendee}
+            />
           ))}
         </Stack>
 

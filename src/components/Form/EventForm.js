@@ -56,6 +56,10 @@ const EventForm = ({
                 </Grid>
 
                 <Grid item xs={12} md={6}>
+                  <TextFieldWrapper name="location" label="Location*" />
+                </Grid>
+
+                <Grid item xs={12} md={6}>
                   <ResponsiveTimePicker
                     name="startTime"
                     label="Start Time*"
@@ -65,9 +69,6 @@ const EventForm = ({
                   />
                 </Grid>
 
-                <Grid item xs={12} md={6}>
-                  <TextFieldWrapper name="location" label="Location*" />
-                </Grid>
                 <Grid item xs={12} md={6}>
                   <ResponsiveTimePicker
                     name="endTime"

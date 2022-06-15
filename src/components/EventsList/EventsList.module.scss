@@ -58,3 +58,12 @@
   padding: $default-padding 0;
   border-top: 1px solid $light-gray;
 }
+
+.attendeesWrapper {
+  display: flex;
+  flex-wrap: wrap;
+
+  .attendee {
+    margin: 0 $default-margin $default-margin 0;
+  }
+}

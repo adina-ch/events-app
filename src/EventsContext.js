@@ -15,6 +15,7 @@ export const EventsProvider = (props) => {
   const [events, setEvents] = useState([]);
   const [activeRouteValue, setActiveRouteValue] = useState(0);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [eventIdToBeEdited, setEventIdToBeEdited] = useState(null);
 
   const { updateSnack } = useContext(SnackbarContext);
 
@@ -112,7 +113,7 @@ export const EventsProvider = (props) => {
         selectedEvent,
         setSelectedEvent,
         updateEvent,
-
+        setEventIdToBeEdited,
         getEventToBeEdited,
       }}
     >

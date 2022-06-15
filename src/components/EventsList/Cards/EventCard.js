@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -15,6 +15,7 @@ import {
 } from "../../../utils/utils";
 
 import styles from "../EventsList.module.scss";
+import { EventsContext } from "../../../EventsContext";
 
 const EventCard = ({
   eventItem,
@@ -26,6 +27,7 @@ const EventCard = ({
 }) => {
   const { title, date, startTime, endTime, description, id } = eventItem;
 
+  const { setEventIdToBeEdited } = useContext(EventsContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -58,6 +60,7 @@ const EventCard = ({
   };
 
   const handleEdit = (id) => {
+    setEventIdToBeEdited(id);
     navigate(`edit/${id}`);
   };
 
@@ -132,9 +135,7 @@ const EventCard = ({
         {formatDate(date)}, {formatHour(startTime)} - {formatHour(endTime)}
       </Typography>
 
-      <Typography variant="body2" noWrap>
-        {description}
-      </Typography>
+      <Typography variant="body2">{description}</Typography>
     </Paper>
   );
 };
