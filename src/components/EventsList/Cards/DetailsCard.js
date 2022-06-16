@@ -1,7 +1,6 @@
 import { useContext } from "react";
 
 import { EventsContext } from "../../../EventsContext";
-import { ModalContext } from "../../../contexts/ModalContext";
 
 import {
   Chip,
@@ -21,11 +20,14 @@ import {
 } from "../../../utils/utils";
 
 import styles from "../EventsList.module.scss";
+import { useNavigate } from "react-router-dom";
 
-const DetailsCard = () => {
-  const { setOpenModal, setIdToBeDeleted, updateModalContent } =
-    useContext(ModalContext);
-  const { selectedEvent } = useContext(EventsContext);
+const DetailsCard = ({
+  setIdToBeDeleted,
+  handleModalVisibility,
+  updateModalContent,
+}) => {
+  const { selectedEvent, setEventIdToBeEdited } = useContext(EventsContext);
   const {
     title,
     date,
@@ -37,15 +39,22 @@ const DetailsCard = () => {
     id,
   } = selectedEvent;
 
-  const handleDelete = (id, title) => {
-    setOpenModal(true);
+  const navigate = useNavigate();
+
+  const handleDelete = (id) => {
+    setIdToBeDeleted(id);
+    handleModalVisibility();
     updateModalContent(
-      `Delete confirmation - ${capitalizeWordFirstLetter(title)}`,
-      "Do you really want to delete the event? This action cannot be undone.",
+      `Delete confirmation for: ${capitalizeWordFirstLetter(title)}`,
+      "Do you really want to delete this event? This action cannot be undone.",
       "CANCEL",
       "DELETE"
     );
-    setIdToBeDeleted(id);
+  };
+
+  const handleEdit = (id) => {
+    setEventIdToBeEdited(id);
+    navigate(`edit/${id}`);
   };
 
   return (
@@ -54,14 +63,19 @@ const DetailsCard = () => {
       <Paper variant="outlined" className={styles.card}>
         <div className={styles.cardActions}>
           <Tooltip title="Edit">
-            <IconButton>
+            <IconButton
+              onClick={(event) => {
+                handleEdit(id);
+                event.stopPropagation();
+              }}
+            >
               <EditOutlinedIcon fontSize="small" />
             </IconButton>
           </Tooltip>
           <Tooltip title="Delete">
             <IconButton
               onClick={() => {
-                handleDelete(id, title);
+                handleDelete(id);
               }}
             >
               <DeleteOutlineOutlinedIcon fontSize="small" />
@@ -82,9 +96,13 @@ const DetailsCard = () => {
           Attendees:
         </Typography>
 
-        <Stack direction="row" spacing={1}>
+        <Stack direction="row" spacing={1} className={styles.attendeesWrapper}>
           {attendees.map((attendee, index) => (
-            <Chip label={attendee.name} key={index} />
+            <Chip
+              label={attendee.name}
+              key={index}
+              className={styles.attendee}
+            />
           ))}
         </Stack>
 

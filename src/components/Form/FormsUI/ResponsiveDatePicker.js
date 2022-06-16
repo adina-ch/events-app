@@ -7,22 +7,33 @@ const ResponsiveDatePicker = ({
   label,
   name,
   setFieldValue,
-  initialValues,
-  values,
+  minDate,
+  value,
+  errors,
 }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <DatePicker
+        name={name}
         disablePast
         label={label}
         openTo="day"
         views={["year", "month", "day"]}
-        minDate={initialValues[name]}
-        value={values[name]}
+        minDate={new Date(minDate)}
+        value={new Date(value)}
         onChange={(newValue) => {
           setFieldValue(name, newValue);
         }}
-        renderInput={(params) => <TextField {...params} fullWidth={true} />}
+        inputFormat="dd-MM-yyyy"
+        mask={"__-__-____"}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            error={!!errors[name]}
+            helperText={errors[name]}
+            fullWidth={true}
+          />
+        )}
       />
     </LocalizationProvider>
   );

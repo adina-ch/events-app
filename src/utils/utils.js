@@ -72,6 +72,19 @@ export const validationSchema = Yup.object({
     }),
   endTime: Yup.string()
     .required("End time is required")
+    .test("is-greater", "End time should be in the future", function (value) {
+      const { date } = this.parent;
+      const formattedDate = moment(date).format("YYYY-MM-DD");
+      const dateBasedOnEndTime = new Date(value);
+      const formattedEndTimeHour = moment(dateBasedOnEndTime).format("HH:mm");
+      const chosenDate = getNewDateWithParams(
+        formattedDate,
+        formattedEndTimeHour
+      );
+      const now = new Date();
+
+      return now < chosenDate;
+    })
     .test(
       "is-greater",
       "End time should be greater than start time",

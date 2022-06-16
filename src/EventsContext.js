@@ -1,6 +1,12 @@
 import { useState, createContext, useContext } from "react";
 
-import { addEvent, fetchEvents, deleteEvent, editEvent } from "./API/events";
+import {
+  addEvent,
+  fetchEvents,
+  deleteEvent,
+  fetchEventToBeEdited,
+  editEvent,
+} from "./API/events";
 import { SnackbarContext } from "./contexts/SnackbarContext";
 
 export const EventsContext = createContext();
@@ -9,7 +15,8 @@ export const EventsProvider = (props) => {
   const [events, setEvents] = useState([]);
   const [activeRouteValue, setActiveRouteValue] = useState(0);
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [eventToBeEdited, setEventToBeEdited] = useState(null);
+  const [eventIdToBeEdited, setEventIdToBeEdited] = useState(null);
+
   const { updateSnack } = useContext(SnackbarContext);
 
   const updateLoadedEvents = (data) => {
@@ -32,18 +39,19 @@ export const EventsProvider = (props) => {
     }
   };
 
-  const createEvent = async (event) => {
+  const getEventToBeEdited = async (eventId) => {
     try {
-      await addEvent(event);
+      await fetchEventToBeEdited(eventId);
+
       getEventsList();
     } catch (error) {
       return error;
     }
   };
 
-  const updateEvent = async (eventId, event) => {
+  const updateEvent = async (eventId, eventBody) => {
     try {
-      await editEvent(eventId, event);
+      await editEvent(eventId, eventBody);
       getEventsList();
       updateSnack("Event was updated successfully!", true, "success");
     } catch (error) {
@@ -52,6 +60,15 @@ export const EventsProvider = (props) => {
         true,
         "error"
       );
+      return error;
+    }
+  };
+
+  const createEvent = async (event) => {
+    try {
+      await addEvent(event);
+      getEventsList();
+    } catch (error) {
       return error;
     }
   };
@@ -96,8 +113,8 @@ export const EventsProvider = (props) => {
         selectedEvent,
         setSelectedEvent,
         updateEvent,
-        eventToBeEdited,
-        setEventToBeEdited,
+        setEventIdToBeEdited,
+        getEventToBeEdited,
       }}
     >
       {props.children}

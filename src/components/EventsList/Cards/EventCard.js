@@ -1,6 +1,5 @@
-import { useContext, useState } from "react";
-
-import { ModalContext } from "../../../contexts/ModalContext";
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
@@ -16,15 +15,19 @@ import {
 } from "../../../utils/utils";
 
 import styles from "../EventsList.module.scss";
-import { useNavigate } from "react-router-dom";
 import { EventsContext } from "../../../EventsContext";
 
-const EventCard = ({ eventItem, handleShowDetails, active }) => {
+const EventCard = ({
+  eventItem,
+  handleShowDetails,
+  active,
+  handleModalVisibility,
+  setIdToBeDeleted,
+  updateModalContent,
+}) => {
   const { title, date, startTime, endTime, description, id } = eventItem;
 
-  const { setEventToBeEdited, updateEvent } = useContext(EventsContext);
-  const { setOpenModal, setIdToBeDeleted, updateModalContent } =
-    useContext(ModalContext);
+  const { setEventIdToBeEdited } = useContext(EventsContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -44,23 +47,21 @@ const EventCard = ({ eventItem, handleShowDetails, active }) => {
     handleClose();
   };
 
-  const handleDelete = (id, title) => {
+  const handleDelete = (id) => {
     setIdToBeDeleted(id);
-    setOpenModal(true);
+    handleModalVisibility();
+    handleClose();
     updateModalContent(
-      `Delete confirmation - ${capitalizeWordFirstLetter(title)}`,
+      `Delete confirmation for: ${capitalizeWordFirstLetter(title)}`,
       "Do you really want to delete this event? This action cannot be undone.",
       "CANCEL",
       "DELETE"
     );
-    handleClose();
   };
 
-  const handleEdit = (id, event) => {
-    handleClose();
-    setEventToBeEdited(event);
-
-    navigate("/add");
+  const handleEdit = (id) => {
+    setEventIdToBeEdited(id);
+    navigate(`edit/${id}`);
   };
 
   return (
@@ -103,8 +104,9 @@ const EventCard = ({ eventItem, handleShowDetails, active }) => {
           </MenuItem>
 
           <MenuItem
-            onClick={() => {
-              handleEdit(id, eventItem);
+            onClick={(event) => {
+              handleEdit(id);
+              event.stopPropagation();
             }}
           >
             <ListItemIcon>
@@ -116,7 +118,7 @@ const EventCard = ({ eventItem, handleShowDetails, active }) => {
           <MenuItem
             onClick={(event) => {
               event.stopPropagation();
-              handleDelete(id, title);
+              handleDelete(id);
             }}
           >
             <ListItemIcon>
@@ -133,9 +135,7 @@ const EventCard = ({ eventItem, handleShowDetails, active }) => {
         {formatDate(date)}, {formatHour(startTime)} - {formatHour(endTime)}
       </Typography>
 
-      <Typography variant="body2" noWrap>
-        {description}
-      </Typography>
+      <Typography variant="body2">{description}</Typography>
     </Paper>
   );
 };

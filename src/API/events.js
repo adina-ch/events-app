@@ -13,12 +13,14 @@ export const fetchEvents = async () => {
     });
 };
 
-export const addEvent = async (body) => {
+export const fetchEventToBeEdited = async (eventId) => {
   return axios
-    .post(
-      "https://react-events-app-7e674-default-rtdb.europe-west1.firebasedatabase.app/events.json",
-      body
+    .get(
+      `https://react-events-app-7e674-default-rtdb.europe-west1.firebasedatabase.app/events/${eventId}.json`
     )
+    .then((response) => {
+      return response.data;
+    })
     .catch((error) => {
       return error;
     });
@@ -33,6 +35,17 @@ export const editEvent = async (eventId, body) => {
     .then((response) => {
       return response.data;
     })
+    .catch((error) => {
+      return error;
+    });
+};
+
+export const addEvent = async (body) => {
+  return axios
+    .post(
+      "https://react-events-app-7e674-default-rtdb.europe-west1.firebasedatabase.app/events.json",
+      body
+    )
     .catch((error) => {
       return error;
     });
