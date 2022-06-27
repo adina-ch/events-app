@@ -61,28 +61,32 @@ const DetailsCard = ({
     <>
       <Typography variant="h2">Selected event</Typography>
       <Paper variant="outlined" className={styles.card}>
-        <div className={styles.cardActions}>
-          <Tooltip title="Edit">
-            <IconButton
-              onClick={(event) => {
-                handleEdit(id);
-                event.stopPropagation();
-              }}
-            >
-              <EditOutlinedIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Delete">
-            <IconButton
-              onClick={() => {
-                handleDelete(id);
-              }}
-            >
-              <DeleteOutlineOutlinedIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
+        <div className={styles.cardHeader}>
+          <Typography variant="h6">
+            {capitalizeWordFirstLetter(title)}
+          </Typography>
+          <div className={styles.cardActions}>
+            <Tooltip title="Edit">
+              <IconButton
+                onClick={(event) => {
+                  handleEdit(id);
+                  event.stopPropagation();
+                }}
+              >
+                <EditOutlinedIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Delete">
+              <IconButton
+                onClick={() => {
+                  handleDelete(id);
+                }}
+              >
+                <DeleteOutlineOutlinedIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </div>
         </div>
-        <Typography variant="h6">{capitalizeWordFirstLetter(title)}</Typography>
 
         <Typography variant="body2" className={styles.cardText}>
           Date: {formatDate(date)}

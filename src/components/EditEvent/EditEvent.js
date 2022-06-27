@@ -71,6 +71,7 @@ const EditEvent = () => {
         submitBtnText="EDIT"
         cancelBtnText="CANCEL"
         initialValues={eventToBeEdited}
+        loading={loading}
       />
     )
   );

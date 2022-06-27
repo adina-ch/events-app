@@ -146,13 +146,22 @@ export const sortEventsAscending = (events, sortCondition) => {
       return 1;
     }
     if (a[sortCondition] === b[sortCondition]) {
-      const startTimeA = new Date(`${a.date}T${a.startTime}`);
-      const startTimeB = new Date(`${b.date}T${b.startTime}`);
-      if (startTimeA.getTime() < startTimeB.getTime()) {
+      const startTimeAndDateA = new Date(
+        `${moment(a.date).format("YYYY-MM-DD")}T${moment(a.startTime).format(
+          "HH:mm"
+        )}`
+      );
+      const startTimeAndDateB = new Date(
+        `${moment(b.date).format("YYYY-MM-DD")}T${moment(b.startTime).format(
+          "HH:mm"
+        )}`
+      );
+
+      if (startTimeAndDateA.getTime() < startTimeAndDateB.getTime()) {
         return -1;
       }
 
-      if (startTimeA.getTime() > startTimeB.getTime()) {
+      if (startTimeAndDateA.getTime() > startTimeAndDateB.getTime()) {
         return 1;
       }
     }
@@ -175,13 +184,22 @@ export const sortEventsDescending = (events, sortCondition) => {
     }
 
     if (a[sortCondition] === b[sortCondition]) {
-      const startTimeA = new Date(`${a.date}T${a.startTime}`);
-      const startTimeB = new Date(`${b.date}T${b.startTime}`);
-      if (startTimeA.getTime() > startTimeB.getTime()) {
+      const startTimeAndDateA = new Date(
+        `${moment(a.date).format("YYYY-MM-DD")}T${moment(a.startTime).format(
+          "HH:mm"
+        )}`
+      );
+      const startTimeAndDateB = new Date(
+        `${moment(b.date).format("YYYY-MM-DD")}T${moment(b.startTime).format(
+          "HH:mm"
+        )}`
+      );
+
+      if (startTimeAndDateA.getTime() > startTimeAndDateB.getTime()) {
         return -1;
       }
 
-      if (startTimeA.getTime() < startTimeB.getTime()) {
+      if (startTimeAndDateA.getTime() < startTimeAndDateB.getTime()) {
         return 1;
       }
     }

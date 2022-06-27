@@ -15,29 +15,34 @@ import ErrorPage from "./components/ErrorPage/ErrorPage";
 import { Box } from "@mui/system";
 import { Container, Toolbar } from "@mui/material";
 import styles from "./App.module.scss";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
-      <SnackbarProvider>
-        <EventsProvider>
-          <BrowserRouter>
-            <Box className={styles.flexWrapper}>
-              <Sidebar />
-              <Container maxWidth="lg">
-                <Toolbar />
-                <Routes>
-                  <Route path="/" element={<EventsList />}></Route>
-                  <Route path="/add" element={<AddEvent />} />
-                  <Route path="/edit/:id" element={<EditEvent />} />
-                  <Route path="/error" element={<ErrorPage />} />
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-              </Container>
-            </Box>
-          </BrowserRouter>
-        </EventsProvider>
-      </SnackbarProvider>
+      <QueryClientProvider client={queryClient}>
+        <SnackbarProvider>
+          <EventsProvider>
+            <BrowserRouter>
+              <Box className={styles.flexWrapper}>
+                <Sidebar />
+                <Container maxWidth="lg" className={styles.custom}>
+                  <Toolbar />
+                  <Routes>
+                    <Route path="/" element={<EventsList />}></Route>
+                    <Route path="/add" element={<AddEvent />} />
+                    <Route path="/edit/:id" element={<EditEvent />} />
+                    <Route path="/error" element={<ErrorPage />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                  </Routes>
+                </Container>
+              </Box>
+            </BrowserRouter>
+          </EventsProvider>
+        </SnackbarProvider>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 };

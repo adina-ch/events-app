@@ -12,6 +12,7 @@ import ResponsiveDatePicker from "./FormsUI/ResponsiveDatePicker";
 import ResponsiveTimePicker from "./FormsUI/ResponsiveTimePicker";
 
 import styles from "./EventForm.module.scss";
+import { LoadingButton } from "@mui/lab";
 
 const EventForm = ({
   pageTitle,
@@ -19,6 +20,7 @@ const EventForm = ({
   submitBtnText,
   cancelBtnText,
   initialValues,
+  loading,
 }) => {
   return (
     <>
@@ -41,7 +43,7 @@ const EventForm = ({
                     name="date"
                     label="Date*"
                     value={values.date}
-                    minDate={initialValues.date}
+                    minDate={new Date()}
                     setFieldValue={setFieldValue}
                     errors={errors}
                   />
@@ -90,13 +92,14 @@ const EventForm = ({
 
                 <Grid item xs={12}>
                   <Stack spacing={2} direction="row">
-                    <Button
+                    <LoadingButton
                       variant="contained"
                       type="submit"
+                      loading={loading}
                       disabled={isSubmitting || Object.keys(errors).length > 0}
                     >
                       {submitBtnText}
-                    </Button>
+                    </LoadingButton>
                     <Button variant="outlined" component={NavLink} to="/">
                       {cancelBtnText}
                     </Button>

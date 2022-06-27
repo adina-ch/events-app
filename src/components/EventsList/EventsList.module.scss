@@ -37,14 +37,16 @@
 
 .card {
   padding: $default-padding * 2;
-  position: relative;
   width: 100%;
-
-  .cardActions {
-    position: absolute;
-    right: $default-padding;
-    top: $default-padding;
-    cursor: pointer;
+  .cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .cardActions {
+      right: $default-padding;
+      top: $default-padding;
+      cursor: pointer;
+    }
   }
 
   .cardText {

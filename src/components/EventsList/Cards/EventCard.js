@@ -72,70 +72,73 @@ const EventCard = ({
       }`}
       onClick={handleShowDetails}
     >
-      <div className={styles.cardActions}>
-        <IconButton onClick={handleClick}>
-          <MoreHorizIcon
-            color="primary"
-            aria-controls={open ? "basic-menu" : undefined}
-            aria-expanded={open ? "true" : undefined}
-            fontSize="small"
-          />
-        </IconButton>
+      <div className={styles.cardHeader}>
+        <Typography variant="h6">{capitalizeWordFirstLetter(title)}</Typography>
+        <div className={styles.cardActions}>
+          <IconButton onClick={handleClick}>
+            <MoreHorizIcon
+              color="primary"
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-expanded={open ? "true" : undefined}
+              fontSize="small"
+            />
+          </IconButton>
 
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={(event) => {
-            event.stopPropagation();
-            handleClose();
-          }}
-          MenuListProps={{
-            "aria-labelledby": "basic-button",
-          }}
-          transformOrigin={{ horizontal: "right", vertical: "top" }}
-          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-        >
-          <MenuItem onClick={handleDetailsVisibility}>
-            <ListItemIcon>
-              <InfoOutlinedIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Show details</ListItemText>
-          </MenuItem>
-
-          <MenuItem
-            onClick={(event) => {
-              handleEdit(id);
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={(event) => {
               event.stopPropagation();
+              handleClose();
             }}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+            transformOrigin={{ horizontal: "right", vertical: "top" }}
+            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           >
-            <ListItemIcon>
-              <EditOutlinedIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Edit</ListItemText>
-          </MenuItem>
+            <MenuItem onClick={handleDetailsVisibility}>
+              <ListItemIcon>
+                <InfoOutlinedIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Show details</ListItemText>
+            </MenuItem>
 
-          <MenuItem
-            onClick={(event) => {
-              event.stopPropagation();
-              handleDelete(id);
-            }}
-          >
-            <ListItemIcon>
-              <DeleteOutlineOutlinedIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Delete</ListItemText>
-          </MenuItem>
-        </Menu>
+            <MenuItem
+              onClick={(event) => {
+                handleEdit(id);
+                event.stopPropagation();
+              }}
+            >
+              <ListItemIcon>
+                <EditOutlinedIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Edit</ListItemText>
+            </MenuItem>
+
+            <MenuItem
+              onClick={(event) => {
+                event.stopPropagation();
+                handleDelete(id);
+              }}
+            >
+              <ListItemIcon>
+                <DeleteOutlineOutlinedIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Delete</ListItemText>
+            </MenuItem>
+          </Menu>
+        </div>
       </div>
-
-      <Typography variant="h6">{capitalizeWordFirstLetter(title)}</Typography>
 
       <Typography variant="body2" className={styles.cardText}>
         {formatDate(date)}, {formatHour(startTime)} - {formatHour(endTime)}
       </Typography>
 
-      <Typography variant="body2">{description}</Typography>
+      <Typography variant="body2" noWrap>
+        {description}
+      </Typography>
     </Paper>
   );
 };

@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -11,6 +11,7 @@ import { initialValues } from "../../utils/utils";
 const AddEvent = () => {
   const { createEvent, getActiveRoute } = useContext(EventsContext);
   const { updateSnack } = useContext(SnackbarContext);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getActiveRoute();
@@ -19,12 +20,15 @@ const AddEvent = () => {
   const navigate = useNavigate();
 
   const handleCreateEvent = (event, description) => {
+    setLoading(true);
+
     createEvent({
       ...event,
       description: description || "No description provided",
     })
       .then((response) => {
         updateSnack("Event created successfully!", true, "success");
+        setLoading(false);
       })
       .catch((error) => {
         updateSnack(
@@ -32,6 +36,7 @@ const AddEvent = () => {
           true,
           "error"
         );
+        setLoading(false);
       });
   };
 
@@ -44,9 +49,10 @@ const AddEvent = () => {
       updateSnack("", false, "success");
     }, 2500);
 
-    resetForm();
-
-    navigate("/");
+    if (!loading) {
+      resetForm();
+      navigate("/");
+    }
   };
 
   return (
@@ -56,6 +62,7 @@ const AddEvent = () => {
       submitBtnText="CREATE"
       cancelBtnText="CANCEL"
       initialValues={initialValues}
+      loading={loading}
     />
   );
 };
