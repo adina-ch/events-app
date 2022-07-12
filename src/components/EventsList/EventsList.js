@@ -25,12 +25,13 @@ import CustomSwitch from "./Actions/Switch";
 import styles from "./EventsList.module.scss";
 import DeleteModal from "./DeleteModal/DeleteModal";
 import { fetchEventToBeEdited } from "../../API/events";
+import Loading from "../Loading/Loading";
 
 const EventsList = () => {
   const {
     events,
     getEventsList,
-    getActiveRoute,
+
     selectedEvent,
     setSelectedEvent,
     removeEvent,
@@ -44,6 +45,7 @@ const EventsList = () => {
   const [isDescending, setIsDescending] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [idToBeDeleted, setIdToBeDeleted] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [modalContent, setModalContent] = useState({
     modalTitle: "",
     modalContent: "",
@@ -51,9 +53,15 @@ const EventsList = () => {
     deleteBtnText: "",
   });
 
+  const awaitEventsList = async () => {
+    setLoading(true);
+    await getEventsList();
+    setLoading(false);
+  };
+
   useEffect(() => {
-    getEventsList();
-    getActiveRoute();
+    setLoading(true);
+    awaitEventsList();
 
     selectedEvent && setActive(selectedEvent.id);
 
@@ -61,11 +69,13 @@ const EventsList = () => {
       fetchEventToBeEdited(selectedEvent.id)
         .then((result) => {
           if (result) {
+            setLoading(false);
             const selected = { ...result, id: selectedEvent.id };
             setSelectedEvent(selected);
           }
         })
         .catch((err) => {
+          setLoading(false);
           return err;
         });
     }
@@ -192,55 +202,61 @@ const EventsList = () => {
           </Stack>
         </Grid>
 
-        <Grid
-          item
-          xs={12}
-          md={calculateColumns(selectedEvent)}
-          order={{ xs: 4, md: 3 }}
-        >
-          <Typography variant="h2">
-            {events.length > 0 ? "Upcoming events" : "No upcoming events"}
-          </Typography>
-
-          <List className={styles.cardsList}>
-            {events.length > 0 ? (
-              sortedAndFilteredEvents.map((eventItem) => (
-                <ListItem key={eventItem.id}>
-                  <EventCard
-                    eventItem={eventItem}
-                    handleShowDetails={() => {
-                      handleShowDetails(eventItem.id);
-                    }}
-                    active={active}
-                    setIdToBeDeleted={setIdToBeDeleted}
-                    handleModalVisibility={handleModalVisibility}
-                    updateModalContent={updateModalContent}
-                  />
-                </ListItem>
-              ))
-            ) : (
-              <Typography variant="body1" className={styles.resultsBox}>
-                You have no events in the list.
+        {loading ? (
+          <Loading />
+        ) : (
+          <>
+            <Grid
+              item
+              xs={12}
+              md={calculateColumns(selectedEvent)}
+              order={{ xs: 4, md: 3 }}
+            >
+              <Typography variant="h2">
+                {events.length > 0 ? "Upcoming events" : "No upcoming events"}
               </Typography>
-            )}
 
-            {sortedAndFilteredEvents.length === 0 && searchTerm && (
-              <Typography variant="body1" className={styles.resultsBox}>
-                We couldn't find any matches for "{searchTerm}". Please try a
-                different search term.
-              </Typography>
-            )}
-          </List>
-        </Grid>
+              <List className={styles.cardsList}>
+                {events.length > 0 ? (
+                  sortedAndFilteredEvents.map((eventItem) => (
+                    <ListItem key={eventItem.id}>
+                      <EventCard
+                        eventItem={eventItem}
+                        handleShowDetails={() => {
+                          handleShowDetails(eventItem.id);
+                        }}
+                        active={active}
+                        setIdToBeDeleted={setIdToBeDeleted}
+                        handleModalVisibility={handleModalVisibility}
+                        updateModalContent={updateModalContent}
+                      />
+                    </ListItem>
+                  ))
+                ) : (
+                  <Typography variant="body1" className={styles.resultsBox}>
+                    You have no events in the list.
+                  </Typography>
+                )}
 
-        {selectedEvent && (
-          <Grid item xs={12} md={6} order={{ xs: 3, md: 4 }}>
-            <DetailsCard
-              setIdToBeDeleted={setIdToBeDeleted}
-              handleModalVisibility={handleModalVisibility}
-              updateModalContent={updateModalContent}
-            />
-          </Grid>
+                {sortedAndFilteredEvents.length === 0 && searchTerm && (
+                  <Typography variant="body1" className={styles.resultsBox}>
+                    We couldn't find any matches for "{searchTerm}". Please try
+                    a different search term.
+                  </Typography>
+                )}
+              </List>
+            </Grid>
+
+            {selectedEvent && (
+              <Grid item xs={12} md={6} order={{ xs: 3, md: 4 }}>
+                <DetailsCard
+                  setIdToBeDeleted={setIdToBeDeleted}
+                  handleModalVisibility={handleModalVisibility}
+                  updateModalContent={updateModalContent}
+                />
+              </Grid>
+            )}
+          </>
         )}
       </Grid>
     </>

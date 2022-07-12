@@ -16,3 +16,25 @@ div .menuItem {
   text-align: center;
   padding: $default-padding;
 }
+
+div.linkContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: $default-padding * 2 0;
+}
+
+ul.list {
+  padding: 0;
+}
+
+a.link {
+  text-decoration: none;
+
+  color: #616161;
+}
+
+a.active {
+  color: #735bf2;
+}

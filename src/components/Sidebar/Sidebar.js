@@ -1,6 +1,4 @@
-import { useContext } from "react";
-
-import { EventsContext } from "../../EventsContext";
+import { useState } from "react";
 
 import { NavLink } from "react-router-dom";
 
@@ -9,36 +7,35 @@ import {
   Button,
   Divider,
   Drawer,
-  Tab,
-  Tabs,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
   Typography,
 } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
-
-import styles from "./Sidebar.module.scss";
-
-import { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
+
+import styles from "./Sidebar.module.scss";
+
 import { DRAWER_WIDTH } from "../../utils/utils";
 
 const Sidebar = (props) => {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { activeRouteValue, setActiveRouteValue } = useContext(EventsContext);
-
-  const activeValueHandler = (e, newValue) => {
-    setActiveRouteValue(newValue);
-  };
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  let activeClassName = `${styles.active} ${styles.link}`;
+  let navLinkClassName = `${styles.link}`;
 
   const drawer = (
     <div>
@@ -49,27 +46,34 @@ const Sidebar = (props) => {
       </Button>
       <Divider />
 
-      <Tabs
-        orientation="vertical"
-        indicatorColor="primary"
-        value={activeRouteValue}
-        onChange={activeValueHandler}
-      >
-        <Tab
-          label="Events"
-          icon={<CalendarTodayIcon fontSize="large" />}
-          component={NavLink}
+      <List className={styles.list}>
+        <NavLink
           to="/"
-          className={styles.menuItem}
-        />
-        <Tab
-          label="Add"
-          icon={<AddRoundedIcon fontSize="large" />}
-          component={NavLink}
+          className={({ isActive }) =>
+            isActive ? activeClassName : navLinkClassName
+          }
+        >
+          <ListItem disablePadding>
+            <ListItemButton className={styles.linkContainer}>
+              <CalendarTodayIcon fontSize="large" />
+              <ListItemText>EVENTS</ListItemText>
+            </ListItemButton>
+          </ListItem>
+        </NavLink>
+        <NavLink
           to="/add"
-          className={styles.menuItem}
-        />
-      </Tabs>
+          className={({ isActive }) =>
+            isActive ? activeClassName : navLinkClassName
+          }
+        >
+          <ListItem disablePadding>
+            <ListItemButton className={styles.linkContainer}>
+              <AddRoundedIcon fontSize="large" />
+              <ListItemText>ADD</ListItemText>
+            </ListItemButton>
+          </ListItem>
+        </NavLink>
+      </List>
     </div>
   );
 

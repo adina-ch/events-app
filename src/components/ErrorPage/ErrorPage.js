@@ -4,16 +4,8 @@ import { Button, Typography } from "@mui/material";
 import notFound from "./not_found.svg";
 
 import styles from "./ErrorPage.module.scss";
-import { useContext, useEffect } from "react";
-import { EventsContext } from "../../EventsContext";
 
 const ErrorPage = () => {
-  const { setActiveRouteValue } = useContext(EventsContext);
-
-  useEffect(() => {
-    setActiveRouteValue(false);
-  }, []);
-
   return (
     <div className={styles.deleteModalWrapper}>
       <Typography variant="h1">Event not found</Typography>

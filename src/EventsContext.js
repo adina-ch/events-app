@@ -13,7 +13,6 @@ export const EventsContext = createContext();
 
 export const EventsProvider = (props) => {
   const [events, setEvents] = useState([]);
-  const [activeRouteValue, setActiveRouteValue] = useState(0);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [eventIdToBeEdited, setEventIdToBeEdited] = useState(null);
 
@@ -91,15 +90,6 @@ export const EventsProvider = (props) => {
     }, 2500);
   };
 
-  const getActiveRoute = () => {
-    const pathName = window.location.pathname;
-    if (pathName === "/" && activeRouteValue !== 0) {
-      setActiveRouteValue(0);
-    } else if (pathName === "/add" && activeRouteValue !== 1) {
-      setActiveRouteValue(1);
-    }
-  };
-
   return (
     <EventsContext.Provider
       value={{
@@ -107,9 +97,6 @@ export const EventsProvider = (props) => {
         getEventsList,
         createEvent,
         removeEvent,
-        activeRouteValue,
-        setActiveRouteValue,
-        getActiveRoute,
         selectedEvent,
         setSelectedEvent,
         updateEvent,

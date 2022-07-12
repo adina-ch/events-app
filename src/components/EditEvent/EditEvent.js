@@ -9,38 +9,32 @@ import EventForm from "../Form/EventForm";
 import { fetchEventToBeEdited } from "../../API/events";
 
 const EditEvent = () => {
-  const { updateEvent, setActiveRouteValue } = useContext(EventsContext);
+  const { updateEvent } = useContext(EventsContext);
   const { updateSnack } = useContext(SnackbarContext);
 
   const [eventToBeEdited, setEventToBeEdited] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const { id: eventIdFromUrl } = useParams();
 
   useEffect(() => {
-    setActiveRouteValue(false);
-
-    setLoading(true);
-
     if (eventIdFromUrl) {
       fetchEventToBeEdited(eventIdFromUrl)
         .then((result) => {
           if (result) {
-            setLoading(false);
             setEventToBeEdited(result);
           } else {
             navigate("/error");
           }
         })
         .catch((err) => {
-          setLoading(false);
+          return err;
         });
     }
   }, []);
 
-  const handleEditEvent = (id, event) => {
-    updateEvent(id, { ...event })
+  const handleEditEvent = async (id, event) => {
+    await updateEvent(id, { ...event })
       .then((response) => {
         updateSnack("Event edited successfully!", true, "success");
       })
@@ -53,8 +47,8 @@ const EditEvent = () => {
       });
   };
 
-  const handleSubmit = (values, { resetForm }) => {
-    handleEditEvent(eventIdFromUrl, values);
+  const handleSubmit = async (values, { resetForm }) => {
+    await handleEditEvent(eventIdFromUrl, values);
 
     setTimeout(() => {
       updateSnack("", false, "success");
@@ -71,7 +65,6 @@ const EditEvent = () => {
         submitBtnText="EDIT"
         cancelBtnText="CANCEL"
         initialValues={eventToBeEdited}
-        loading={loading}
       />
     )
   );

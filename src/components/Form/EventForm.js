@@ -95,7 +95,7 @@ const EventForm = ({
                     <LoadingButton
                       variant="contained"
                       type="submit"
-                      loading={loading}
+                      loading={isSubmitting}
                       disabled={isSubmitting || Object.keys(errors).length > 0}
                     >
                       {submitBtnText}

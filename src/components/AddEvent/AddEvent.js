@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -9,13 +9,9 @@ import EventForm from "../Form/EventForm";
 import { initialValues } from "../../utils/utils";
 
 const AddEvent = () => {
-  const { createEvent, getActiveRoute } = useContext(EventsContext);
+  const { createEvent } = useContext(EventsContext);
   const { updateSnack } = useContext(SnackbarContext);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    getActiveRoute();
-  }, []);
 
   const navigate = useNavigate();
 
@@ -62,7 +58,6 @@ const AddEvent = () => {
       submitBtnText="CREATE"
       cancelBtnText="CANCEL"
       initialValues={initialValues}
-      loading={loading}
     />
   );
 };

@@ -1,0 +1,9 @@
+@import "../../styles/variables";
+
+.box {
+  display: flex;
+  width: 100%;
+  padding: $default-padding * 2;
+  justify-content: center;
+  margin-left: $default-margin * 2;
+}

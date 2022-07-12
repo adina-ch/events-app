@@ -5,6 +5,10 @@ import { EventsContext } from "../../../EventsContext";
 import {
   Chip,
   IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   Paper,
   Stack,
   Tooltip,
@@ -12,6 +16,9 @@ import {
 } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 
 import {
   capitalizeWordFirstLetter,
@@ -89,11 +96,16 @@ const DetailsCard = ({
         </div>
 
         <Typography variant="body2" className={styles.cardText}>
-          Date: {formatDate(date)}
+          Date:
+          {formatDate(date)}
         </Typography>
 
         <Typography variant="body2" className={styles.cardText}>
           Time: {formatHour(startTime)} - {formatHour(endTime)}
+        </Typography>
+
+        <Typography variant="body2" className={styles.cardText}>
+          Location: {location}
         </Typography>
 
         <Typography variant="body2" className={styles.cardText}>
@@ -109,10 +121,6 @@ const DetailsCard = ({
             />
           ))}
         </Stack>
-
-        <Typography variant="body2" className={styles.cardText}>
-          Location: {location}
-        </Typography>
 
         <Typography variant="body2" className={styles.selectedCardDescription}>
           {description}
